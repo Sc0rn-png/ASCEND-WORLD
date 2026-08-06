@@ -1,3 +1,23 @@
+// Charger l'utilisateur sauvegardé au démarrage
+const [user, setUser] = useState<User | null>(() => {
+  const saved = localStorage.getItem('ascend_user');
+  return saved ? JSON.parse(saved) : null;
+});
+
+// Sauvegarder automatiquement l'utilisateur à chaque modification de l'état
+useEffect(() => {
+  if (user) {
+    localStorage.setItem('ascend_user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('ascend_user');
+  }
+}, [user]);
+
+// Fonction de déconnexion à ajouter à la barre de navigation
+const handleLogout = () => {
+  setUser(null);
+  setCurrentScreen('home');
+};
 import React, { useState } from 'react';
 import { Screen, User, Drop } from './types';
 import { AuthScreen } from './components/AuthScreen';
