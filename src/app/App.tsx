@@ -1,3 +1,13 @@
+import HeaderHero from 'src/app/components/HeaderHero';
+
+export default function App() {
+  return (
+    <div>
+      <HeaderHero />
+    </div>
+  );
+}
+
 import { useState, useEffect, type ComponentType } from "react";
 import { motion } from "motion/react";
 import { clsx, type ClassValue } from "clsx";
@@ -2075,15 +2085,6 @@ export default function App() {
         </main>
         <BottomNav active={screen} navigate={navigate} />
       </div>
-    </div>
-  );
-}
-import HeaderHero from 'src/app/components/HeaderHero.tsx';
-
-export default function App() {
-  return (
-    <div>
-      <HeaderHero />
     </div>
   );
 }
