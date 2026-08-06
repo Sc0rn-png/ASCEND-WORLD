@@ -1,13 +1,4 @@
 import HeaderHero from './components/HeaderHero';
-
-export default function App() {
-  return (
-    <div>
-      <HeaderHero />
-    </div>
-  );
-}
-
 import { useState, useEffect, type ComponentType } from "react";
 import { motion } from "motion/react";
 import { clsx, type ClassValue } from "clsx";
