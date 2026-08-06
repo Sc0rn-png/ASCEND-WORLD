@@ -2078,3 +2078,12 @@ export default function App() {
     </div>
   );
 }
+import HeaderHero from 'src/app/components/HeaderHero.tsx';
+
+export default function App() {
+  return (
+    <div>
+      <HeaderHero />
+    </div>
+  );
+}
