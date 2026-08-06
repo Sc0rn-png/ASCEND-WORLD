@@ -1,24 +1,4 @@
-// Charger l'utilisateur sauvegardé au démarrage
-const [user, setUser] = useState<User | null>(() => {
-  const saved = localStorage.getItem('ascend_user');
-  return saved ? JSON.parse(saved) : null;
-});
-
-// Sauvegarder automatiquement l'utilisateur à chaque modification de l'état
-useEffect(() => {
-  if (user) {
-    localStorage.setItem('ascend_user', JSON.stringify(user));
-  } else {
-    localStorage.removeItem('ascend_user');
-  }
-}, [user]);
-
-// Fonction de déconnexion à ajouter à la barre de navigation
-const handleLogout = () => {
-  setUser(null);
-  setCurrentScreen('home');
-};
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Screen, User, Drop } from './types';
 import { AuthScreen } from './components/AuthScreen';
 import { CatalogScreen } from './components/CatalogScreen';
@@ -33,8 +13,30 @@ const SAMPLE_DROPS: Drop[] = [
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedDropId, setSelectedDropId] = useState<string>('001');
-  const [user, setUser] = useState<User | null>(null);
   const [votedIds, setVotedIds] = useState<string[]>([]);
+
+  // 1. Chargement sécurisé de l'utilisateur depuis localStorage
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const saved = localStorage.getItem('ascend_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // 2. Sauvegarde automatique à chaque changement d'utilisateur
+  useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem('ascend_user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('ascend_user');
+      }
+    } catch (e) {
+      console.error("Erreur d'accès au localStorage:", e);
+    }
+  }, [user]);
 
   const selectedDrop = SAMPLE_DROPS.find(d => d.id === selectedDropId) || SAMPLE_DROPS[0];
 
@@ -63,24 +65,41 @@ export default function App() {
     setUser({ ...user, points: user.points + 10 });
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    setCurrentScreen('home');
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 text-white font-sans p-4 max-w-3xl mx-auto">
-      {/* Navigation supérieure */}
+      {/* Navigation */}
       <nav className="flex items-center justify-between border-b border-neutral-800 pb-4 mb-6">
         <span onClick={() => setCurrentScreen('home')} className="font-bold tracking-wider text-sm cursor-pointer">
           ASCEND-WORLD
         </span>
-        <div className="flex gap-4 text-xs font-medium">
+        <div className="flex gap-4 text-xs font-medium items-center">
           <button onClick={() => setCurrentScreen('home')} className={currentScreen === 'home' ? 'text-indigo-400' : 'text-neutral-400 hover:text-white'}>Accueil</button>
           <button onClick={() => setCurrentScreen('catalog')} className={currentScreen === 'catalog' ? 'text-indigo-400' : 'text-neutral-400 hover:text-white'}>Catalogue</button>
           <button onClick={() => setCurrentScreen('voting')} className={currentScreen === 'voting' ? 'text-indigo-400' : 'text-neutral-400 hover:text-white'}>Votes</button>
-          <button onClick={() => setCurrentScreen(user ? 'profile' : 'auth')} className="bg-neutral-800 px-3 py-1 rounded border border-neutral-700">
-            {user ? `${user.name} (${user.points} pts)` : 'Connexion'}
-          </button>
+          
+          {user ? (
+            <div className="flex items-center gap-2">
+              <button onClick={() => setCurrentScreen('profile')} className="bg-neutral-800 px-3 py-1 rounded border border-neutral-700">
+                {user.name} ({user.points} pts)
+              </button>
+              <button onClick={handleLogout} className="text-neutral-400 hover:text-red-400 text-xs">
+                Déconnexion
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setCurrentScreen('auth')} className="bg-indigo-600 px-3 py-1 rounded text-white font-bold">
+              Connexion
+            </button>
+          )}
         </div>
       </nav>
 
-      {/* Écran : ACCUEIL */}
+      {/* Écrans */}
       {currentScreen === 'home' && (
         <div className="space-y-6 py-6 text-center">
           <h1 className="text-3xl font-extrabold tracking-tight">Bienvenue sur la plateforme ASCEND</h1>
@@ -93,10 +112,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Écran : AUTHENTIFICATION & RGPD */}
       {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
 
-      {/* Écran : CATALOGUE */}
       {currentScreen === 'catalog' && (
         <CatalogScreen 
           drops={SAMPLE_DROPS} 
@@ -104,7 +121,6 @@ export default function App() {
         />
       )}
 
-      {/* Écran : DETAIL PROJET */}
       {currentScreen === 'detail' && (
         <div className="space-y-4 bg-neutral-800 p-6 rounded-lg border border-neutral-700">
           <span className="text-xs text-indigo-400 font-mono">Détails Projet #{selectedDrop.id}</span>
@@ -122,12 +138,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Écran : CHECKOUT / PAIEMENT */}
       {currentScreen === 'checkout' && (
         <CheckoutScreen drop={selectedDrop} onConfirmPayment={handleConfirmPayment} />
       )}
 
-      {/* Écran : CONFIRMATION PAIEMENT */}
       {currentScreen === 'confirmation' && (
         <div className="text-center py-12 space-y-4 bg-neutral-800 p-6 rounded-lg border border-neutral-700">
           <h2 className="text-2xl font-bold text-emerald-400">Paiement validé !</h2>
@@ -143,12 +157,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Écran : VOTES */}
       {currentScreen === 'voting' && (
         <VotingScreen votedIds={votedIds} onVote={handleVote} />
       )}
 
-      {/* Écran : PROFIL CLIENT */}
       {currentScreen === 'profile' && user && (
         <div className="space-y-4 bg-neutral-800 p-6 rounded-lg border border-neutral-700">
           <h2 className="text-xl font-bold">Espace Membre</h2>
