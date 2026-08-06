@@ -8,20 +8,37 @@ interface ProfileScreenProps {
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) => {
   return (
-    <div className="space-y-4 bg-neutral-800 p-6 rounded-lg border border-neutral-700 max-w-md mx-auto">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Espace Membre</h2>
-        <button onClick={onLogout} className="text-xs text-red-400 hover:underline">
-          Déconnexion
-        </button>
-      </div>
+    <div className="max-w-2xl mx-auto py-6">
+      <div className="bg-[#12141A] rounded-2xl border border-white/10 p-8 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden space-y-6">
+        
+        <div className="flex justify-between items-center border-b border-white/10 pb-6">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Profil Joueur</span>
+            <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-0.5">{user.name}</h2>
+          </div>
+          <button onClick={onLogout} className="text-xs font-mono text-red-400 hover:text-red-300 uppercase tracking-wider">
+            Déconnexion
+          </button>
+        </div>
 
-      <div className="space-y-2 text-sm text-neutral-300 bg-neutral-900 p-4 rounded border border-neutral-700">
-        <p><strong>Nom :</strong> {user.name}</p>
-        <p><strong>Email :</strong> {user.email}</p>
-        <p><strong>Solde de points :</strong> <span className="text-indigo-400 font-bold">{user.points} pts</span></p>
-        <p><strong>Statut RGPD :</strong> <span className="text-emerald-400">Accepté</span></p>
-        <p><strong>Commandes :</strong> {user.orders.length > 0 ? user.orders.join(', ') : 'Aucune commande'}</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl">
+            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Solde Points</span>
+            <span className="text-2xl font-black text-[#00FF87] mt-1 block">{user.points} PTS</span>
+          </div>
+          <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl">
+            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Statut RGPD</span>
+            <span className="text-sm font-bold text-white mt-2 block">Conforme ✓</span>
+          </div>
+        </div>
+
+        <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl space-y-2">
+          <span className="block text-[10px] font-mono text-neutral-500 uppercase">Historique des Commandes</span>
+          <p className="text-xs font-mono text-neutral-300">
+            {user.orders.length > 0 ? user.orders.join(' • ') : 'Aucune commande enregistrée'}
+          </p>
+        </div>
+
       </div>
     </div>
   );
