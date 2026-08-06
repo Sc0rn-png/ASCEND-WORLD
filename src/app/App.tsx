@@ -13,15 +13,21 @@ const SAMPLE_DROPS: Drop[] = [
     id: '001', 
     title: 'EXTRACT PROTOCOL #01', 
     price: 35, 
-    description: 'Accès exclusif au lot physique zéro. Équipement tactique numéroté limité à 100 unités.', 
-    status: 'live' 
+    description: 'Priority access to physical prototype batch zero. Numbered tactical gear limited to 100 units worldwide.', 
+    status: 'live',
+    category: 'HARDWARE / GEAR',
+    progressPercent: 78,
+    imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '002', 
     title: 'CREATOR APPAREL KIT', 
     price: 50, 
-    description: 'Drop vestimentaire premium en coton lourd 450 GSM avec marquage aluminium brossé.', 
-    status: 'coming_soon' 
+    description: 'Heavyweight 450 GSM organic cotton streetwear bundle featuring brushed aluminum emblems.', 
+    status: 'coming_soon',
+    category: 'STREETWEAR / APPAREL',
+    progressPercent: 32,
+    imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000'
   }
 ];
 
@@ -47,7 +53,7 @@ export default function App() {
         localStorage.removeItem('ascend_user');
       }
     } catch (e) {
-      console.error("Erreur d'accès au localStorage:", e);
+      console.error("Storage write error:", e);
     }
   }, [user]);
 
@@ -71,7 +77,7 @@ export default function App() {
 
   const handleVote = (creationId: string) => {
     if (!user) {
-      alert("Veuillez créer un compte pour débloquer votre vote.");
+      alert("Please create an account to unlock voting rights.");
       return setCurrentScreen('auth');
     }
     setVotedIds([...votedIds, creationId]);
@@ -86,15 +92,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#090A0C] text-white font-sans antialiased selection:bg-white selection:text-black relative overflow-x-hidden">
       
-      {/* Halos de lumière ambiants et reflets métalliques */}
+      {/* Subtle background glow */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-white/[0.04] to-transparent blur-3xl pointer-events-none -z-10" />
       <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/[0.02] blur-[120px] pointer-events-none -z-10" />
 
-      {/* Navigation Minimaliste & Glassmorphisme */}
+      {/* Navigation */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090A0C]/70 border-b border-white/[0.08] transition-all">
         <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
           
-          {/* Logo ASCEND */}
           <div 
             onClick={() => setCurrentScreen('home')} 
             className="cursor-pointer group flex items-center gap-2"
@@ -105,13 +110,12 @@ export default function App() {
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse" />
           </div>
 
-          {/* Nav Items */}
           <nav className="flex items-center gap-8 text-xs font-bold tracking-wider uppercase">
             <button 
               onClick={() => setCurrentScreen('home')} 
               className={`transition-colors ${currentScreen === 'home' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
             >
-              Accueil
+              Home
             </button>
             <button 
               onClick={() => setCurrentScreen('catalog')} 
@@ -123,11 +127,10 @@ export default function App() {
               onClick={() => setCurrentScreen('voting')} 
               className={`transition-colors ${currentScreen === 'voting' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
             >
-              Arène
+              Arena
             </button>
           </nav>
 
-          {/* User Status / Compteur Vert Vif */}
           <div>
             {user ? (
               <button 
@@ -144,7 +147,7 @@ export default function App() {
                 onClick={() => setCurrentScreen('auth')} 
                 className="relative group overflow-hidden rounded-xl bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-5 py-2.5 transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
               >
-                Rejoindre
+                Join World
               </button>
             )}
           </div>
@@ -157,26 +160,26 @@ export default function App() {
           <div className="py-16 text-center space-y-8 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono tracking-widest uppercase text-neutral-400">
               <span className="w-2 h-2 rounded-full bg-[#00FF87]" />
-              Saison 01 — Phase de Qualification
+              Season 01 — Qualification Phase
             </div>
             
             <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white uppercase leading-none">
-              PROGRESSE. <br />
+              PROGRESS. <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-400 to-neutral-600">
-                DOMINE.
+                DOMINATE.
               </span>
             </h1>
 
             <p className="text-neutral-400 text-base font-normal leading-relaxed max-w-lg mx-auto">
-              Accédez aux drops exclusifs, débloquez des récompenses physiques et votez pour façonner les projets de la communauté.
+              Access exclusive gear drops, unlock reward tiers, and vote to engineer the next generation of physical creations.
             </p>
 
             <div className="pt-4 flex items-center justify-center gap-4">
               <button 
                 onClick={() => setCurrentScreen('catalog')} 
-                className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black font-black text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_10px_30px_rgba(255,255,255,0.2)] hover:shadow-[0_15px_35px_rgba(255,255,255,0.3)]"
+                className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black font-black text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_10px_30px_rgba(255,255,255,0.2)]"
               >
-                Explorer les Drops
+                Explore Active Drops
               </button>
             </div>
           </div>
