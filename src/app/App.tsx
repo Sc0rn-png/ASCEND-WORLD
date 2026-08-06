@@ -1,4 +1,4 @@
-import HeaderHero from 'src/app/components/HeaderHero';
+import HeaderHero from './components/HeaderHero';
 
 export default function App() {
   return (
