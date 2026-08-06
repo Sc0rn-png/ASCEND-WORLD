@@ -1,5 +1,8 @@
 import React from 'react';
 import { Drop } from '../types';
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 
 interface CatalogScreenProps {
   drops: Drop[];
@@ -8,27 +11,33 @@ interface CatalogScreenProps {
 
 export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDrop }) => {
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold">Drops & Projets en cours</h2>
-      <div className="grid gap-4 md:grid-cols-2">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold tracking-tight">Drops & Projets</h2>
+        <Badge variant="outline" className="font-mono">Saison 01</Badge>
+      </div>
+      
+      <div className="grid gap-6 md:grid-cols-2">
         {drops.map((drop) => (
-          <div key={drop.id} className="border border-neutral-700 p-4 rounded-lg bg-neutral-800 space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-xs bg-indigo-900 text-indigo-300 px-2 py-0.5 rounded font-mono">#{drop.id}</span>
-              <span className="text-xs text-emerald-400 font-bold">{drop.status.toUpperCase()}</span>
-            </div>
-            <h3 className="font-bold text-lg">{drop.title}</h3>
-            <p className="text-xs text-neutral-400">{drop.description}</p>
-            <div className="flex justify-between items-center pt-2">
-              <span className="font-bold text-sm">{drop.price} €</span>
-              <button 
-                onClick={() => onSelectDrop(drop.id)} 
-                className="bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-neutral-200 transition"
-              >
+          <Card key={drop.id} className="bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 transition-all">
+            <CardHeader>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-mono text-neutral-500">#{drop.id}</span>
+                <Badge variant={drop.status === 'live' ? 'default' : 'secondary'}>
+                  {drop.status.toUpperCase()}
+                </Badge>
+              </div>
+              <CardTitle className="text-xl">{drop.title}</CardTitle>
+              <CardDescription className="text-neutral-400">{drop.description}</CardDescription>
+            </CardHeader>
+
+            <CardFooter className="flex justify-between items-center pt-4 border-t border-neutral-800/60">
+              <span className="text-lg font-bold">{drop.price} €</span>
+              <Button onClick={() => onSelectDrop(drop.id)}>
                 Voir le projet
-              </button>
-            </div>
-          </div>
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
     </div>
