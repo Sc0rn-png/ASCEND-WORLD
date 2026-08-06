@@ -10,25 +10,19 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
   const [password, setPassword] = useState('');
   const [rgpd, setRgpd] = useState(false);
   
-  // État Anti-Bot & Sécurité
-  const [botVerified, setBotVerified] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
+  const [verificationCode, setVerificationCode] = useState('123456');
   const [inputCode, setInputCode] = useState('');
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!rgpd) return alert("Vous devez accepter la politique RGPD.");
-    
-    // 1. Simuler l'envoi du code de vérification par email
     setIsEmailSent(true);
-    setVerificationCode('123456'); // Simulation d'un code OTP
   };
 
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputCode === verificationCode) {
-      // 2. Validation réussie -> Création finale du compte
       onRegister(name, email, rgpd);
     } else {
       alert("Code de vérification incorrect.");
@@ -36,87 +30,108 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-neutral-800 p-6 rounded-lg border border-neutral-700 space-y-4">
-      {!isEmailSent ? (
-        <form onSubmit={handleFormSubmit} className="space-y-4">
-          <h2 className="text-xl font-bold">Créer un compte sécurisé</h2>
-          
-          <div>
-            <label className="block text-xs mb-1 text-neutral-400">Nom / Pseudo</label>
+    <div className="max-w-md mx-auto py-6">
+      <div className="bg-[#12141A] rounded-2xl border border-white/10 p-8 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden">
+        {/* Ligne lumineuse haut de carte */}
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+        {!isEmailSent ? (
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            <div>
+              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Accès Membre // Security</span>
+              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Créer un Compte</h2>
+              <p className="text-xs text-neutral-400 mt-1">Rejoignez l'arène et débloquez +150 PTS dès l'inscription.</p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Pseudo / Nom</label>
+                <input 
+                  type="text" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                  className="w-full p-3.5 bg-[#090A0C] border border-white/10 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-white/40 transition-all" 
+                  placeholder="EX: PLAYER_01"
+                  required 
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Adresse Email</label>
+                <input 
+                  type="email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  className="w-full p-3.5 bg-[#090A0C] border border-white/10 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-white/40 transition-all" 
+                  placeholder="nom@domaine.com"
+                  required 
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Mot de passe</label>
+                <input 
+                  type="password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className="w-full p-3.5 bg-[#090A0C] border border-white/10 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-white/40 transition-all" 
+                  minLength={8}
+                  placeholder="••••••••"
+                  required 
+                />
+              </div>
+            </div>
+
+            {/* Consentement RGPD */}
+            <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl space-y-2">
+              <label className="flex items-start gap-3 cursor-pointer text-xs text-neutral-300">
+                <input 
+                  type="checkbox" 
+                  checked={rgpd} 
+                  onChange={(e) => setRgpd(e.target.checked)} 
+                  className="mt-0.5 rounded bg-black border-white/20 text-emerald-500 focus:ring-0"
+                  required 
+                />
+                <span>J'accepte la collecte de mes données conformément au traitement RGPD.</span>
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_5px_20px_rgba(255,255,255,0.15)]"
+            >
+              Envoyer le Code de Vérification
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyCode} className="space-y-6 text-center">
+            <div>
+              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Vérification OTP</span>
+              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Code de Sécurité</h2>
+              <p className="text-xs text-neutral-400 mt-2">
+                Code à 6 chiffres envoyé à <span className="text-white font-bold">{email}</span>.
+              </p>
+            </div>
+
             <input 
               type="text" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              className="w-full p-2 bg-neutral-900 border border-neutral-700 rounded text-sm text-white" 
+              placeholder="123456" 
+              value={inputCode} 
+              onChange={(e) => setInputCode(e.target.value)} 
+              className="w-full p-4 bg-[#090A0C] border border-white/10 rounded-xl text-center font-mono font-black text-2xl tracking-[0.3em] text-white focus:outline-none focus:border-[#00FF87]/50" 
+              maxLength={6}
               required 
             />
-          </div>
 
-          <div>
-            <label className="block text-xs mb-1 text-neutral-400">Email</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              className="w-full p-2 bg-neutral-900 border border-neutral-700 rounded text-sm text-white" 
-              required 
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs mb-1 text-neutral-400">Mot de passe</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="w-full p-2 bg-neutral-900 border border-neutral-700 rounded text-sm text-white" 
-              minLength={8}
-              required 
-            />
-          </div>
-
-          {/* RGPD */}
-          <div className="p-3 bg-neutral-900 border border-neutral-700 rounded text-xs space-y-2">
-            <label className="flex items-center gap-2 cursor-pointer text-white">
-              <input 
-                type="checkbox" 
-                checked={rgpd} 
-                onChange={(e) => setRgpd(e.target.checked)} 
-                required 
-              />
-              J'accepte le traitement RGPD de mes données.
-            </label>
-          </div>
-
-          {/* Bouton de validation */}
-          <button 
-            type="submit" 
-            className="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded text-sm font-bold transition"
-          >
-            S'inscrire (Vérification Email)
-          </button>
-        </form>
-      ) : (
-        /* Écran de saisie du code OTP (Email envoyé) */
-        <form onSubmit={handleVerifyCode} className="space-y-4 text-center">
-          <h2 className="text-xl font-bold">Vérification de l'email</h2>
-          <p className="text-xs text-neutral-400">
-            Un code à 6 chiffres a été envoyé à <span className="text-white font-bold">{email}</span>.
-          </p>
-          <input 
-            type="text" 
-            placeholder="Code (ex: 123456)" 
-            value={inputCode} 
-            onChange={(e) => setInputCode(e.target.value)} 
-            className="w-full p-2 bg-neutral-900 border border-neutral-700 rounded text-center font-mono text-lg text-white" 
-            maxLength={6}
-            required 
-          />
-          <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 py-2 rounded text-sm font-bold transition">
-            Valider mon compte
-          </button>
-        </form>
-      )}
+            <button 
+              type="submit" 
+              className="w-full bg-[#00FF87] hover:bg-[#00E077] text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_0_25px_rgba(0,255,135,0.25)]"
+            >
+              Activer mon Compte (+150 PTS)
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 };
