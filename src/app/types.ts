@@ -1,12 +1,4 @@
-export type Screen = 
-  | 'home' 
-  | 'auth' 
-  | 'catalog' 
-  | 'detail' 
-  | 'checkout' 
-  | 'confirmation' 
-  | 'voting' 
-  | 'profile';
+export type Screen = 'home' | 'auth' | 'catalog' | 'detail' | 'checkout' | 'confirmation' | 'voting' | 'profile';
 
 export interface User {
   name: string;
@@ -22,4 +14,7 @@ export interface Drop {
   price: number;
   description: string;
   status: 'live' | 'coming_soon';
+  imageUrl: string;
+  category: string;
+  progressPercent: number;
 }
