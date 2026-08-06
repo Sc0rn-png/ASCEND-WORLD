@@ -1,5 +1,5 @@
+import React, { useState, useEffect, type ComponentType } from "react";
 import HeaderHero from './components/HeaderHero';
-import { useState, useEffect, type ComponentType } from "react";
 import { motion } from "motion/react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -394,7 +394,6 @@ function Badge({
   );
 }
 
-// Status badge with live pulse animation
 function StatusBadge({ status, className = "" }: { status: DropStatus; className?: string }) {
   const config: Record<DropStatus, { label: string; cls: string; pulse?: boolean }> = {
     "live": { label: "Live", cls: "bg-emerald-50 text-emerald-700 border border-emerald-200", pulse: true },
@@ -485,7 +484,6 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
   );
 }
 
-// Inline mini countdown for cards
 function MiniCountdown({ endDate }: { endDate: Date }) {
   const { days, hours, minutes, seconds } = useCountdown(endDate);
   if (days > 0) return <span className="tabular-nums">{days}d {hours}h</span>;
@@ -493,7 +491,6 @@ function MiniCountdown({ endDate }: { endDate: Date }) {
   return <span className="tabular-nums">{minutes}m {seconds}s</span>;
 }
 
-// Full countdown blocks for detail screen
 function CountdownWidget({ endDate, className = "", light = false }: { endDate: Date; className?: string; light?: boolean }) {
   const { days, hours, minutes, seconds } = useCountdown(endDate);
   return (
@@ -520,7 +517,6 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
   const isLive = drop.status === "live";
 
   if (compact) {
-    // 2-column compact card for landing highlights
     return (
       <motion.div
         whileTap={{ scale: 0.97 }}
@@ -558,19 +554,16 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
     );
   }
 
-  // Full 1-column card for catalog
   return (
     <motion.div
       whileTap={{ scale: 0.985 }}
       onClick={onClick}
       className="bg-card rounded-3xl overflow-hidden border border-border cursor-pointer shadow-sm hover:shadow-md transition-shadow"
     >
-      {/* Image */}
       <div className="relative">
         <img src={drop.image} alt={drop.title} className="w-full h-52 object-cover bg-muted" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-        {/* Drop label */}
         <div className="absolute top-4 left-4 flex items-center gap-2">
           <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">
             DROP #{drop.dropNumber}
@@ -582,18 +575,13 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
           )}
         </div>
 
-        {/* Status */}
         <div className="absolute top-4 right-4">
           <StatusBadge status={drop.status} />
         </div>
 
-        {/* Bottom row on image */}
         <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
           <div>
-            <h3
-              className="text-white text-xl font-bold leading-tight"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <h3 className="text-white text-xl font-bold leading-tight">
               {drop.title}
             </h3>
             <Badge
@@ -612,12 +600,9 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-4 space-y-4">
-        {/* Theme */}
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{drop.theme}</p>
 
-        {/* Preorder progress */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-bold text-foreground">{drop.preorderCount} / {drop.maxUnits} reserved</span>
@@ -630,7 +615,6 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
           <ProgressBar value={drop.preorderCount} max={drop.maxUnits} />
         </div>
 
-        {/* Prize + countdown chips */}
         <div className="flex gap-2">
           <div className="flex-1 flex items-center gap-2 bg-violet-50 rounded-2xl px-3 py-2">
             <Crown size={13} className="text-violet-600 flex-shrink-0" />
@@ -652,7 +636,6 @@ function DropCard({ drop, onClick, compact = false }: { drop: Drop; onClick: () 
           </div>
         </div>
 
-        {/* CTA */}
         <Btn fullWidth size="md" onClick={onClick}>
           View Challenge <ArrowRight size={15} />
         </Btn>
@@ -725,1357 +708,273 @@ function SettingsRow({
   );
 }
 
-// ─── Screen 1: Landing ────────────────────────────────────────────────────────
+// ─── Screens ──────────────────────────────────────────────────────────────────
 
 function LandingScreen({ navigate }: NavProps) {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const featured = DROPS[0]; // DROP #001 — always featured
-  const remaining = featured.maxUnits - featured.preorderCount;
-
   return (
-    <div>
-      {/* ── Featured Hero — DROP #001 ── */}
-      <div className="relative overflow-hidden">
-        <div className="relative h-[520px]">
-          <img
-            src={featured.image}
-            alt={featured.title}
-            className="w-full h-full object-cover bg-slate-900"
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/10" />
-
-          {/* Top bar */}
-          <div className="absolute top-0 left-0 right-0 p-5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
-                <Crown size={13} className="text-white" />
-              </div>
-              <span className="text-white font-bold text-base" style={{ fontFamily: "var(--font-display)" }}>
-                Craftly
-              </span>
-            </div>
-            <StatusBadge status="live" />
-          </div>
-
-          {/* Content overlay */}
-          <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-            {/* Drop label */}
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
-                DROP #{featured.dropNumber}
-              </span>
-              <div className="h-px flex-1 bg-white/10" />
-              {featured.tag && (
-                <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">
-                  {featured.tag}
-                </span>
-              )}
-            </div>
-
-            {/* Title */}
-            <h1
-              className="text-5xl font-bold text-white leading-none mb-2 tracking-tight"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              {featured.title}
-            </h1>
-            <p className="text-white/60 text-sm leading-relaxed mb-5 max-w-xs">
-              {featured.theme}
-            </p>
-
-            {/* Live stats card */}
-            <div className="bg-white/8 backdrop-blur-xl border border-white/12 rounded-3xl p-4 mb-4">
-              {/* Progress */}
-              <ProgressBar value={featured.preorderCount} max={featured.maxUnits} light className="mb-2" />
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-[11px] text-white/50 font-medium tabular-nums">
-                  {featured.preorderCount} reserved
-                </span>
-                <span className="text-[11px] font-bold text-rose-400 tabular-nums">
-                  {remaining} spots left
-                </span>
-              </div>
-
-              {/* Stats grid */}
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="text-center bg-white/8 rounded-2xl py-2.5">
-                  <div className="text-base font-bold text-white tabular-nums">{featured.preorderCount}</div>
-                  <div className="text-[9px] text-white/40 font-semibold uppercase tracking-wide">Joined</div>
-                </div>
-                <div className="text-center bg-white/8 rounded-2xl py-2.5">
-                  <div className="text-base font-bold text-rose-400 tabular-nums">{remaining}</div>
-                  <div className="text-[9px] text-white/40 font-semibold uppercase tracking-wide">Remaining</div>
-                </div>
-                <div className="text-center bg-white/8 rounded-2xl py-2.5">
-                  <div className="text-base font-bold text-violet-300 tabular-nums">{featured.currency}{featured.prizePool}</div>
-                  <div className="text-[9px] text-white/40 font-semibold uppercase tracking-wide">Prize Pool</div>
-                </div>
-              </div>
-
-              {/* Countdown */}
-              <CountdownWidget endDate={featured.endDate} light />
-            </div>
-
-            {/* CTAs */}
-            <div className="space-y-2">
-              <Btn
-                fullWidth
-                size="lg"
-                onClick={() => navigate("detail", { dropId: featured.id })}
-                className="shadow-2xl shadow-primary/40"
-              >
-                Join the Challenge · {featured.currency}{featured.price}
-                <ArrowRight size={16} />
-              </Btn>
-              <button
-                className="w-full text-center text-white/40 text-xs font-semibold py-1 hover:text-white/60 transition-colors"
-                onClick={() => navigate("catalog")}
-              >
-                View all 8 drops ↓
-              </button>
-            </div>
-          </div>
+    <div className="space-y-8 pb-12">
+      <section className="px-4 max-w-4xl mx-auto space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold tracking-tight">Active Drops</h2>
+          <button onClick={() => navigate("catalog")} className="text-xs font-bold text-primary flex items-center gap-1">
+            View All <ChevronRight size={14} />
+          </button>
         </div>
-      </div>
-
-      <div className="px-4 py-8 space-y-10">
-
-        {/* ── Live Drops ── */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-bold text-foreground">Live Now</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Preorder open — limited spots</p>
-            </div>
-            <button
-              className="text-sm text-primary font-semibold flex items-center gap-1"
-              onClick={() => navigate("catalog")}
-            >
-              See all <ChevronRight size={13} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {LIVE_DROPS.slice(1).map((d) => (
-              <DropCard key={d.id} drop={d} compact onClick={() => navigate("detail", { dropId: d.id })} />
-            ))}
-          </div>
-        </section>
-
-        {/* ── Coming Soon ── */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-bold text-foreground">Coming Soon</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Secure early access now</p>
-            </div>
-          </div>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-            {UPCOMING_DROPS.map((d) => (
-              <div key={d.id} className="flex-shrink-0 w-48">
-                <DropCard drop={d} compact onClick={() => navigate("detail", { dropId: d.id })} />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Total prize pool banner ── */}
-        <div className="bg-gradient-to-br from-violet-600 via-indigo-600 to-indigo-700 rounded-3xl p-5 text-white">
-          <div className="flex items-center gap-2 mb-3">
-            <Crown size={16} className="text-yellow-300" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">Season Prize Pool</span>
-          </div>
-          <div className="text-4xl font-bold mb-1" style={{ fontFamily: "var(--font-display)" }}>
-            {DROPS[0].currency}{DROPS.reduce((s, d) => s + d.prizePool, 0).toLocaleString()}
-          </div>
-          <p className="text-white/60 text-sm mb-4">Distributed across all 8 drops to top creators</p>
-          <div className="grid grid-cols-3 gap-2">
-            {["🥇 50%", "🥈 30%", "🥉 20%"].map((p) => (
-              <div key={p} className="bg-white/10 rounded-xl py-2 text-center text-xs font-bold">{p}</div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {LIVE_DROPS.map((drop) => (
+            <DropCard key={drop.id} drop={drop} onClick={() => navigate("detail", { dropId: drop.id })} />
+          ))}
         </div>
+      </section>
 
-        {/* ── How it works ── */}
-        <section>
-          <h2 className="text-lg font-bold text-foreground mb-6">How It Works</h2>
-          <div className="space-y-5">
-            {[
-              { step: "1", title: "Secure Your Spot", desc: "Preorder a Drop before it sells out. Each edition is strictly limited — once it is gone, it is gone.", icon: Package, color: "bg-indigo-50 text-indigo-600" },
-              { step: "2", title: "Receive & Create", desc: "Your box arrives with everything you need. No external materials. Just the contents and your vision.", icon: Zap, color: "bg-violet-50 text-violet-600" },
-              { step: "3", title: "Submit & Win", desc: "Upload your creation. The community votes, the jury judges, and the best work wins real prizes.", icon: Trophy, color: "bg-amber-50 text-amber-600" },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-4 items-start">
-                <div className={cn("w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0", item.color)}>
-                  <item.icon size={19} />
-                </div>
-                <div className="flex-1">
-                  <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-0.5">Step {item.step}</div>
-                  <h3 className="font-bold text-foreground mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+      <section className="px-4 max-w-4xl mx-auto space-y-4">
+        <h2 className="text-xl font-bold tracking-tight">Upcoming Drops</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {UPCOMING_DROPS.slice(0, 4).map((drop) => (
+            <DropCard key={drop.id} drop={drop} compact onClick={() => navigate("detail", { dropId: drop.id })} />
+          ))}
+        </div>
+      </section>
 
-        {/* ── Testimonials ── */}
-        <section>
-          <h2 className="text-lg font-bold text-foreground mb-4">Creator Stories</h2>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="flex-shrink-0 w-[280px] bg-card border border-border rounded-3xl p-5">
-                <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} size={11} className="text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-foreground leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
-                <div className="flex items-center gap-3 pt-3 border-t border-border">
-                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover bg-muted" />
-                  <div>
-                    <div className="text-sm font-semibold text-foreground">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.drop}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── FAQ ── */}
-        <section>
-          <h2 className="text-lg font-bold text-foreground mb-4">Questions</h2>
-          <div className="space-y-2">
-            {FAQS.map((faq, i) => (
-              <div key={i} className="border border-border rounded-2xl overflow-hidden bg-card">
-                <button
-                  className="w-full flex items-center justify-between p-4 text-left gap-3"
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
-                  <span className="text-sm font-semibold text-foreground flex-1 leading-snug">{faq.q}</span>
-                  <ChevronDown size={15} className={cn("text-muted-foreground flex-shrink-0 transition-transform duration-200", openFaq === i && "rotate-180")} />
-                </button>
-                {openFaq === i && (
-                  <div className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed border-t border-border pt-3">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Footer ── */}
-        <footer className="border-t border-border pt-8 pb-6">
-          <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center">
-              <Crown size={14} className="text-white" />
-            </div>
-            <span className="font-bold text-foreground text-lg" style={{ fontFamily: "var(--font-display)" }}>Craftly</span>
-          </div>
-          <p className="text-sm text-muted-foreground mb-5 leading-relaxed max-w-xs">
-            Premium limited-edition creative challenge boxes. Not just a product — an exclusive creative event.
-          </p>
-          <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground mb-6">
-            {["About", "All Drops", "Community", "Press Kit", "Privacy Policy", "Terms of Use"].map((l) => (
-              <button key={l} className="text-left hover:text-foreground transition-colors">{l}</button>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground">&copy; 2025 Craftly Inc. All rights reserved.</p>
-        </footer>
-      </div>
+      <section className="px-4 max-w-4xl mx-auto space-y-4">
+        <h2 className="text-xl font-bold tracking-tight">Community Showcase</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {GALLERY_ITEMS.slice(0, 3).map((item) => (
+            <GalleryItemCard key={item.id} item={item} onVote={() => {}} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
-
-// ─── Screen 2: Catalog ────────────────────────────────────────────────────────
 
 function CatalogScreen({ navigate }: NavProps) {
-  const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const FILTERS = ["All", "Live", "Coming Soon", "Wearable", "Sculpture", "Decor"];
-
-  const filtered = DROPS.filter((d) => {
-    const matchesSearch = search === "" || d.title.toLowerCase().includes(search.toLowerCase()) || d.dropNumber.includes(search);
-    const matchesFilter =
-      activeFilter === "All"
-        ? true
-        : activeFilter === "Live"
-        ? d.status === "live"
-        : activeFilter === "Coming Soon"
-        ? d.status === "coming-soon"
-        : d.category === activeFilter;
-    return matchesSearch && matchesFilter;
-  });
-
   return (
-    <div className="px-4 py-4">
-      <div className="mb-5">
-        <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
-          All Drops
-        </h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          {LIVE_DROPS.length} live · {UPCOMING_DROPS.length} coming soon
-        </p>
+    <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-black uppercase tracking-tight">All Drops</h1>
+        <p className="text-xs font-semibold text-muted-foreground">Discover physical creation kits and join the competition.</p>
       </div>
-
-      {/* Search */}
-      <div className="relative mb-4">
-        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Search by name or drop number..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full h-12 bg-input-background rounded-2xl pl-10 pr-4 text-sm text-foreground border border-border outline-none focus:border-primary transition-colors placeholder:text-muted-foreground/60"
-        />
-      </div>
-
-      {/* Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-hide -mx-4 px-4">
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            className={cn(
-              "flex-shrink-0 h-9 px-4 rounded-xl text-sm font-semibold transition-all",
-              activeFilter === f
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "bg-muted text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {f}
-          </button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {DROPS.map((drop) => (
+          <DropCard key={drop.id} drop={drop} onClick={() => navigate("detail", { dropId: drop.id })} />
         ))}
       </div>
-
-      {/* Drops list — 1-column, full cards */}
-      <div className="space-y-4">
-        {filtered.map((d) => (
-          <DropCard key={d.id} drop={d} onClick={() => navigate("detail", { dropId: d.id })} />
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="text-5xl mb-4">🔍</div>
-          <p className="font-semibold text-foreground mb-1">No drops found</p>
-          <p className="text-sm text-muted-foreground">Try a different search or filter</p>
-        </div>
-      )}
     </div>
   );
 }
-
-// ─── Screen 3: Detail ─────────────────────────────────────────────────────────
 
 function DetailScreen({ navigate, navData }: NavProps) {
-  const dropId = (navData?.dropId as string) ?? "1";
-  const drop = DROPS.find((d) => d.id === dropId) ?? DROPS[0];
-  const [bookmarked, setBookmarked] = useState(false);
-  const [materialsOpen, setMaterialsOpen] = useState(false);
-  const remaining = drop.maxUnits - drop.preorderCount;
-  const isLive = drop.status === "live";
+  const dropId = (navData?.dropId as string) || "1";
+  const drop = DROPS.find((d) => d.id === dropId) || DROPS[0];
 
   return (
-    <div className="pb-40">
-      {/* Sticky header */}
-      <div className="sticky top-0 z-20 flex items-center justify-between px-4 py-3 bg-background/90 backdrop-blur-md border-b border-border">
-        <button
-          onClick={() => navigate("catalog")}
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-          DROP #{drop.dropNumber}
-        </span>
-        <div className="flex gap-2">
-          <button
-            className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted"
-            onClick={() => setBookmarked(!bookmarked)}
-          >
-            <Bookmark size={16} className={cn(bookmarked ? "fill-primary text-primary" : "text-foreground")} />
-          </button>
-          <button className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted">
-            <Share2 size={16} className="text-foreground" />
-          </button>
-        </div>
-      </div>
+    <div className="px-4 py-6 max-w-3xl mx-auto space-y-6">
+      <button onClick={() => navigate("catalog")} className="flex items-center gap-1 text-xs font-bold text-muted-foreground">
+        <ChevronLeft size={16} /> Back to drops
+      </button>
 
-      {/* Hero image */}
-      <div className="relative">
-        <img src={drop.image} alt={drop.title} className="w-full h-72 object-cover bg-muted" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute top-4 left-4 flex items-center gap-2">
-          <StatusBadge status={drop.status} />
-          {drop.tag && (
-            <span className="bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-2.5 py-1 text-[10px] font-bold text-white">
-              {drop.tag}
-            </span>
-          )}
-        </div>
-        <div className="absolute bottom-4 left-5 right-5">
-          <h1
-            className="text-3xl font-bold text-white leading-tight"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {drop.title}
-          </h1>
-        </div>
-      </div>
-
-      <div className="px-4 py-5 space-y-6">
-        {/* Badges row */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="outline">{drop.category}</Badge>
-          <Badge variant={drop.difficulty === "Intermediate" ? "warning" : "success"}>{drop.difficulty}</Badge>
-          {drop.reviews > 0 && (
-            <div className="flex items-center gap-1 ml-auto">
-              <Star size={12} className="text-amber-400 fill-amber-400" />
-              <span className="text-sm font-bold">{drop.rating}</span>
-              <span className="text-xs text-muted-foreground">({drop.reviews})</span>
-            </div>
-          )}
-        </div>
-
-        {/* Theme — the creative brief */}
-        <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border border-primary/10 rounded-3xl p-4">
-          <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">Creative Brief</div>
-          <p className="text-sm text-foreground leading-relaxed font-medium">{drop.theme}</p>
-        </div>
-
-        {/* Quick meta */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-muted rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Package size={16} className="text-primary" />
-            </div>
+      <div className="rounded-3xl overflow-hidden border border-border bg-card">
+        <img src={drop.image} alt={drop.title} className="w-full h-64 object-cover" />
+        <div className="p-6 space-y-6">
+          <div className="flex items-center justify-between">
             <div>
-              <div className="text-[10px] text-muted-foreground font-medium">Edition Size</div>
-              <div className="font-bold text-sm text-foreground">{drop.maxUnits} boxes</div>
+              <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">DROP #{drop.dropNumber}</span>
+              <h1 className="text-3xl font-black uppercase tracking-tight">{drop.title}</h1>
             </div>
+            <StatusBadge status={drop.status} />
           </div>
-          <div className="bg-muted rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Users size={16} className="text-primary" />
-            </div>
-            <div>
-              <div className="text-[10px] text-muted-foreground font-medium">Preorders</div>
-              <div className="font-bold text-sm text-foreground">{drop.preorderCount.toLocaleString()}</div>
-            </div>
-          </div>
-        </div>
 
-        {/* Preorder progress */}
-        <div className="bg-card border border-border rounded-3xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-bold text-sm text-foreground">Preorder Progress</span>
-            {isLive ? (
-              <span className="text-sm font-bold text-rose-600">{remaining} spots left</span>
-            ) : (
-              <span className="text-xs text-muted-foreground">Early access open</span>
-            )}
-          </div>
-          <ProgressBar value={drop.preorderCount} max={drop.maxUnits} showCount />
-          <p className="text-xs text-muted-foreground mt-2">
-            {Math.round((drop.preorderCount / drop.maxUnits) * 100)}% of this limited edition has been reserved
-          </p>
-        </div>
-
-        {/* Countdown */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Clock size={15} className="text-primary" />
-            <span className="font-bold text-sm text-foreground">
-              {isLive ? "Preorder closes in" : "Opens in"}
-            </span>
-          </div>
-          <CountdownWidget endDate={drop.endDate} />
-        </div>
-
-        {/* Prize pool */}
-        <div className="bg-gradient-to-br from-violet-600 via-indigo-600 to-indigo-700 rounded-3xl p-5 text-white">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white/15 rounded-xl flex items-center justify-center">
-                <Crown size={15} className="text-yellow-300" />
-              </div>
-              <div>
-                <div className="text-[9px] font-black uppercase tracking-widest text-white/60">Prize Pool</div>
-                <div className="text-2xl font-bold">{drop.currency}{drop.prizePool.toLocaleString()}</div>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-[10px] text-white/50 uppercase tracking-wide">Awarded to</div>
-              <div className="text-sm font-bold">Top 3 creators</div>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {[
-              `🥇 ${drop.currency}${Math.round(drop.prizePool * 0.5)}`,
-              `🥈 ${drop.currency}${Math.round(drop.prizePool * 0.3)}`,
-              `🥉 ${drop.currency}${Math.round(drop.prizePool * 0.2)}`,
-            ].map((p) => (
-              <div key={p} className="flex-1 bg-white/10 rounded-xl py-1.5 text-center text-xs font-bold">{p}</div>
-            ))}
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <h3 className="font-bold text-foreground mb-2">About This Drop</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">{drop.description}</p>
-        </div>
 
-        {/* Materials */}
-        <div className="border border-border rounded-3xl overflow-hidden bg-card">
-          <button
-            className="w-full flex items-center justify-between p-4"
-            onClick={() => setMaterialsOpen(!materialsOpen)}
-          >
-            <div className="flex items-center gap-2">
-              <Package size={15} className="text-primary" />
-              <span className="font-bold text-sm text-foreground">
-                What&apos;s Inside ({drop.materials.length} items)
-              </span>
-            </div>
-            <ChevronDown size={15} className={cn("text-muted-foreground transition-transform duration-200", materialsOpen && "rotate-180")} />
-          </button>
-          {materialsOpen && (
-            <div className="px-4 pb-4 space-y-2.5 border-t border-border pt-3">
-              {drop.materials.map((m, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check size={10} className="text-primary" />
-                  </div>
-                  <span className="text-sm text-foreground">{m}</span>
-                </div>
+          <CountdownWidget endDate={drop.endDate} />
+
+          <div className="border-t border-border pt-4">
+            <h3 className="font-bold text-sm mb-3">Included Materials</h3>
+            <ul className="space-y-2">
+              {drop.materials.map((m, idx) => (
+                <li key={idx} className="flex items-center gap-2 text-xs font-semibold text-foreground">
+                  <Check size={14} className="text-emerald-500" /> {m}
+                </li>
               ))}
-            </div>
-          )}
-        </div>
-
-        {/* Rules */}
-        <div className="bg-slate-50 border border-slate-100 rounded-3xl p-4">
-          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Ground Rules</div>
-          <ul className="space-y-1.5">
-            {[
-              "Only materials included in the box may be used",
-              "One submission per person per Drop",
-              "Submissions must be your own original work",
-              "Photo must clearly show the finished piece",
-            ].map((r, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                <span className="text-slate-300 mt-0.5">—</span>
-                {r}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Sticky CTA */}
-      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-background/95 backdrop-blur-md border-t border-border px-4 pt-4 pb-4 z-30">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <div className="text-xs text-muted-foreground font-medium">Price per edition</div>
-            <div className="text-2xl font-bold text-foreground">{drop.currency}{drop.price}</div>
+            </ul>
           </div>
-          <div className="text-right">
-            <div className="text-xs text-muted-foreground font-medium">Prize pool</div>
-            <div className="text-lg font-bold text-violet-600">{drop.currency}{drop.prizePool.toLocaleString()}</div>
-          </div>
+
+          <Btn fullWidth size="lg" onClick={() => navigate("checkout", { dropId: drop.id })}>
+            Preorder Now — {drop.currency}{drop.price}
+          </Btn>
         </div>
-        <Btn fullWidth size="lg" onClick={() => navigate("checkout", { drop })}>
-          Join the Challenge <ArrowRight size={16} />
-        </Btn>
       </div>
     </div>
   );
 }
-
-// ─── Screen 4: Checkout ───────────────────────────────────────────────────────
 
 function CheckoutScreen({ navigate, navData }: NavProps) {
-  const drop = (navData?.drop as Drop) ?? DROPS[0];
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", address: "", city: "", card: "", expiry: "", cvv: "" });
-
-  if (orderPlaced) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-8 text-center">
-        <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
-          <CheckCircle size={40} className="text-emerald-500" />
-        </div>
-        <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: "var(--font-display)" }}>
-          You&apos;re In.
-        </h2>
-        <p className="text-muted-foreground mb-1 text-sm leading-relaxed">
-          DROP #{drop.dropNumber} — <strong>{drop.title}</strong>
-        </p>
-        <p className="text-muted-foreground mb-8 text-sm">
-          Your box ships within 3–5 business days after preorders close. Good luck.
-        </p>
-        <Btn onClick={() => navigate("dashboard")}>
-          Go to Dashboard <ArrowRight size={15} />
-        </Btn>
-      </div>
-    );
-  }
+  const dropId = (navData?.dropId as string) || "1";
+  const drop = DROPS.find((d) => d.id === dropId) || DROPS[0];
 
   return (
-    <div>
-      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 border-b border-border bg-background">
-        <button
-          onClick={() => navigate("detail", { dropId: drop.id })}
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <h1 className="font-bold text-foreground flex-1">Checkout</h1>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Lock size={12} /> Secured
-        </div>
-      </div>
+    <div className="px-4 py-6 max-w-md mx-auto space-y-6">
+      <button onClick={() => navigate("detail", { dropId })} className="flex items-center gap-1 text-xs font-bold text-muted-foreground">
+        <ChevronLeft size={16} /> Back to detail
+      </button>
 
-      <div className="px-4 py-6 space-y-6 pb-12">
-        {/* Order Summary */}
-        <div className="bg-card border border-border rounded-3xl overflow-hidden">
-          <div className="flex gap-4 p-4">
-            <img src={drop.image} alt={drop.title} className="w-20 h-20 rounded-2xl object-cover bg-muted flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">
-                DROP #{drop.dropNumber}
-              </div>
-              <h3 className="font-bold text-foreground leading-tight">{drop.title}</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">{drop.difficulty} · {drop.category}</p>
-              <div className="text-lg font-bold text-foreground mt-1">{drop.currency}{drop.price}</div>
-            </div>
-          </div>
-          <div className="border-t border-border px-4 py-3 flex justify-between items-center">
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Crown size={12} className="text-violet-500" />
-              Competing for prize pool
-            </div>
-            <span className="text-sm font-bold text-violet-600">{drop.currency}{drop.prizePool.toLocaleString()}</span>
-          </div>
+      <div className="bg-card border border-border rounded-3xl p-6 space-y-4">
+        <h1 className="text-xl font-black uppercase">Order Summary</h1>
+        <div className="flex items-center justify-between py-2 border-b border-border">
+          <span className="text-sm font-semibold">{drop.title} (DROP #{drop.dropNumber})</span>
+          <span className="text-sm font-bold">{drop.currency}{drop.price}</span>
         </div>
-
-        {/* Shipping */}
-        <div className="space-y-3">
-          <h2 className="font-bold text-foreground">Shipping</h2>
-          <FieldInput label="Full Name" placeholder="Sofia Martinez" value={form.name} onChange={(v) => setForm({ ...form, name: v })} icon={User} />
-          <FieldInput label="Email Address" type="email" placeholder="sofia@email.com" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-          <FieldInput label="Street Address" placeholder="12 Rue de la Créativité" value={form.address} onChange={(v) => setForm({ ...form, address: v })} icon={MapPin} />
-          <FieldInput label="City, Country" placeholder="Paris, France" value={form.city} onChange={(v) => setForm({ ...form, city: v })} />
-        </div>
-
-        {/* Payment */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-bold text-foreground">Payment</h2>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Lock size={11} /> Powered by Stripe
-            </div>
-          </div>
-          <FieldInput label="Card Number" placeholder="4242 4242 4242 4242" value={form.card} onChange={(v) => setForm({ ...form, card: v })} icon={CreditCard} />
-          <div className="grid grid-cols-2 gap-3">
-            <FieldInput label="Expiry" placeholder="MM / YY" value={form.expiry} onChange={(v) => setForm({ ...form, expiry: v })} />
-            <FieldInput label="CVV" placeholder="•••" value={form.cvv} onChange={(v) => setForm({ ...form, cvv: v })} />
-          </div>
-        </div>
-
-        {/* Trust */}
-        <div className="grid grid-cols-3 gap-2">
-          {[{ icon: Shield, label: "SSL Secured" }, { icon: Truck, label: "Free Shipping" }, { icon: CheckCircle, label: "30-day Guarantee" }].map((t) => (
-            <div key={t.label} className="flex flex-col items-center gap-2 p-3 bg-muted rounded-2xl">
-              <t.icon size={18} className="text-primary" />
-              <span className="text-[10px] font-semibold text-muted-foreground text-center leading-tight">{t.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Total */}
-        <div className="border-t border-border pt-4 space-y-2">
-          {[
-            { label: "Subtotal", value: `${drop.currency}${drop.price}` },
-            { label: "Shipping", value: "Free", color: "text-emerald-600" },
-            { label: "VAT included", value: "✓" },
-          ].map((row) => (
-            <div key={row.label} className="flex justify-between">
-              <span className="text-sm text-muted-foreground">{row.label}</span>
-              <span className={cn("text-sm font-semibold", row.color ?? "text-foreground")}>{row.value}</span>
-            </div>
-          ))}
-          <div className="flex justify-between pt-3 border-t border-border">
-            <span className="font-bold text-foreground">Total</span>
-            <span className="font-bold text-foreground text-lg">{drop.currency}{drop.price}</span>
-          </div>
-          <div className="pt-2">
-            <Btn fullWidth size="lg" onClick={() => setOrderPlaced(true)}>
-              <Lock size={15} /> Confirm & Join — {drop.currency}{drop.price}
-            </Btn>
-          </div>
-        </div>
+        <FieldInput label="Email" placeholder="you@example.com" />
+        <FieldInput label="Shipping Address" placeholder="123 Street, City" />
+        <Btn fullWidth size="lg" onClick={() => alert("Preorder submitted!")}>
+          Complete Preorder
+        </Btn>
       </div>
     </div>
   );
 }
-
-// ─── Screen 5: Dashboard ──────────────────────────────────────────────────────
 
 function DashboardScreen({ navigate }: NavProps) {
   return (
-    <div className="px-4 py-5">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Your Creative Hub</p>
-          <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
-            Sofia ✦
-          </h1>
-        </div>
-        <div className="relative">
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format"
-            alt="Avatar"
-            className="w-12 h-12 rounded-full object-cover border-2 border-primary/30 bg-muted"
-          />
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-            <span className="text-[10px] text-white font-bold">3</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-7">
-        {[
-          { label: "Active", value: "2", icon: Zap, bg: "bg-violet-50", iconColor: "text-violet-600" },
-          { label: "Completed", value: "5", icon: CheckCircle, bg: "bg-emerald-50", iconColor: "text-emerald-600" },
-          { label: "Wins", value: "2", icon: Trophy, bg: "bg-amber-50", iconColor: "text-amber-600" },
-        ].map((s) => (
-          <div key={s.label} className="bg-card border border-border rounded-3xl p-4">
-            <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center mb-3", s.bg)}>
-              <s.icon size={17} className={s.iconColor} />
-            </div>
-            <div className="text-2xl font-bold text-foreground leading-none mb-1">{s.value}</div>
-            <div className="text-xs text-muted-foreground font-medium">{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Active Drops */}
-      <section className="mb-7">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold text-foreground">Active Drops</h2>
-          <button className="text-sm text-primary font-semibold flex items-center gap-1" onClick={() => navigate("catalog")}>
-            Browse <ChevronRight size={13} />
-          </button>
-        </div>
-        <div className="space-y-3">
-          {LIVE_DROPS.map((d) => (
-            <div
-              key={d.id}
-              className="bg-card border border-border rounded-3xl p-4 flex gap-3 items-center cursor-pointer active:scale-[0.98] transition-transform"
-              onClick={() => navigate("detail", { dropId: d.id })}
-            >
-              <img src={d.image} alt={d.title} className="w-14 h-14 rounded-2xl object-cover bg-muted flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
-                    #{d.dropNumber}
-                  </span>
-                  <StatusBadge status={d.status} />
-                </div>
-                <h3 className="font-bold text-sm text-foreground truncate">{d.title}</h3>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <ProgressBar value={d.preorderCount} max={d.maxUnits} className="flex-1" />
-                  <span className="text-xs font-bold text-rose-600 flex-shrink-0">
-                    {d.maxUnits - d.preorderCount} left
-                  </span>
-                </div>
-              </div>
-              <ChevronRight size={15} className="text-muted-foreground flex-shrink-0" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Achievements */}
-      <section className="mb-7">
-        <h2 className="text-base font-bold text-foreground mb-4">Achievements</h2>
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-          {[
-            { icon: "🏆", name: "First Win", earned: true },
-            { icon: "👜", name: "Tote Creator", earned: true },
-            { icon: "🎭", name: "Balaclava", earned: true },
-            { icon: "⭐", name: "Top Rated", earned: false },
-            { icon: "🔥", name: "3-Drop Streak", earned: false },
-            { icon: "👑", name: "Grandmaster", earned: false },
-          ].map((a) => (
-            <div
-              key={a.name}
-              className={cn("flex-shrink-0 flex flex-col items-center gap-2 w-20 p-3 rounded-2xl border",
-                a.earned ? "border-primary/20 bg-primary/5" : "border-border bg-muted/50"
-              )}
-            >
-              <span className={cn("text-2xl", !a.earned && "grayscale opacity-40")}>{a.icon}</span>
-              <span className={cn("text-[10px] font-semibold text-center leading-tight",
-                a.earned ? "text-primary" : "text-muted-foreground"
-              )}>
-                {a.name}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Orders */}
-      <section>
-        <h2 className="text-base font-bold text-foreground mb-4">My Orders</h2>
-        <div className="space-y-2">
-          {[
-            { drop: "#001 — Tote Bag", status: "Delivered", date: "Jul 28", price: 35 },
-            { drop: "#002 — Balaclava", status: "In Transit", date: "Aug 3", price: 39 },
-            { drop: "#003 — Fox", status: "Preorder", date: "Aug 10", price: 49 },
-          ].map((o, i) => (
-            <div key={i} className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl">
-              <div>
-                <div className="text-sm font-semibold text-foreground">DROP {o.drop}</div>
-                <div className="text-xs text-muted-foreground">{o.date}</div>
-              </div>
-              <div className="text-right">
-                <div className={cn("text-xs font-bold px-2.5 py-1 rounded-full",
-                  o.status === "Delivered" ? "bg-emerald-50 text-emerald-700" :
-                  o.status === "In Transit" ? "bg-amber-50 text-amber-700" :
-                  "bg-violet-50 text-violet-700"
-                )}>
-                  {o.status}
-                </div>
-                <div className="text-xs text-muted-foreground mt-1">€{o.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+    <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
+      <h1 className="text-2xl font-black uppercase">Creator Dashboard</h1>
+      <p className="text-xs font-semibold text-muted-foreground">Track your preorders and active challenge submissions.</p>
     </div>
   );
 }
-
-// ─── Screen 6: Upload ─────────────────────────────────────────────────────────
 
 function UploadScreen({ navigate }: NavProps) {
-  const [selectedId, setSelectedId] = useState(DROPS[0].id);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const selectedDrop = DROPS.find((d) => d.id === selectedId) ?? DROPS[0];
-
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] px-8 text-center">
-        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-          <CheckCircle size={40} className="text-primary" />
-        </div>
-        <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: "var(--font-display)" }}>
-          Submitted.
-        </h2>
-        <p className="text-muted-foreground text-sm mb-2">
-          DROP #{selectedDrop.dropNumber} — {selectedDrop.title}
-        </p>
-        <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
-          Your creation is now live in the gallery. The community can vote, and the jury will review all submissions when the challenge closes.
-        </p>
-        <Btn onClick={() => navigate("gallery")}>
-          View in Gallery <ArrowRight size={15} />
-        </Btn>
-      </div>
-    );
-  }
-
   return (
-    <div className="px-4 py-4">
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate("gallery")} className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted">
-          <ChevronLeft size={18} />
-        </button>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Upload Creation</h1>
-          <p className="text-xs text-muted-foreground">Submit to the gallery</p>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        {/* Drop selector */}
-        <div>
-          <label className="text-sm font-bold text-foreground mb-2 block">Which Drop?</label>
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-            {DROPS.map((d) => (
-              <button
-                key={d.id}
-                onClick={() => setSelectedId(d.id)}
-                className={cn(
-                  "flex-shrink-0 flex items-center gap-1.5 h-10 px-3 rounded-xl border text-xs font-bold transition-all",
-                  selectedId === d.id
-                    ? "border-primary bg-primary/8 text-primary"
-                    : "border-border text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <span className="text-[9px] font-black opacity-60">#{d.dropNumber}</span>
-                <span>{d.title.split(" ")[0]}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Photos */}
-        <div>
-          <label className="text-sm font-bold text-foreground mb-2 block">Photos — up to 3</label>
-          <div className="grid grid-cols-3 gap-3">
-            {[{ primary: true }, { primary: false }, { primary: false }].map((slot, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-2 cursor-pointer transition-all",
-                  slot.primary ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30 hover:bg-muted"
-                )}
-              >
-                {slot.primary ? (
-                  <>
-                    <Camera size={22} className="text-primary" />
-                    <span className="text-[10px] font-bold text-primary">Main photo</span>
-                  </>
-                ) : (
-                  <>
-                    <Plus size={18} className="text-muted-foreground" />
-                    <span className="text-[10px] text-muted-foreground">Add</span>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <FieldInput label="Title" placeholder={`My ${selectedDrop.title} creation`} value={title} onChange={setTitle} />
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-bold text-foreground">Description</label>
-          <textarea
-            placeholder="Share the story behind your creation — what choices did you make and why?"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            className="w-full bg-input-background rounded-xl border border-border text-foreground text-sm p-4 outline-none focus:border-primary transition-colors resize-none placeholder:text-muted-foreground/60"
-          />
-          <span className="text-xs text-muted-foreground text-right">{description.length} / 500</span>
-        </div>
-
-        <Btn fullWidth size="lg" onClick={() => setSubmitted(true)}>
-          <Send size={15} /> Submit to Gallery
-        </Btn>
-      </div>
+    <div className="px-4 py-6 max-w-md mx-auto space-y-6">
+      <h1 className="text-2xl font-black uppercase">Submit Entry</h1>
+      <FieldInput label="Title" placeholder="Give your creation a name" />
+      <FieldInput label="Description" placeholder="Tell the story of how you made it" />
+      <Btn fullWidth size="lg">Submit to Gallery</Btn>
     </div>
   );
 }
-
-// ─── Screen 7: Gallery ────────────────────────────────────────────────────────
 
 function GalleryScreen({ navigate }: NavProps) {
-  const [items, setItems] = useState(GALLERY_ITEMS);
-  const [filter, setFilter] = useState("All");
-
-  const toggleVote = (id: string) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, voted: !item.voted, likes: item.voted ? item.likes - 1 : item.likes + 1 }
-          : item
-      )
-    );
-  };
-
-  const left = items.filter((_, i) => i % 2 === 0);
-  const right = items.filter((_, i) => i % 2 === 1);
-
   return (
-    <div className="px-4 py-4">
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>Gallery</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Community creations from all drops</p>
-        </div>
-        <button
-          onClick={() => navigate("upload")}
-          className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/25"
-        >
-          <Plus size={18} className="text-white" />
-        </button>
-      </div>
-
-      <div className="flex gap-2 overflow-x-auto pb-3 mb-4 scrollbar-hide -mx-4 px-4">
-        {["All", "DROP #001", "DROP #002", "DROP #003"].map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={cn(
-              "flex-shrink-0 h-9 px-4 rounded-xl text-xs font-bold transition-all",
-              filter === f ? "bg-primary text-primary-foreground shadow-md shadow-primary/20" : "bg-muted text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {f}
-          </button>
+    <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
+      <h1 className="text-2xl font-black uppercase">Community Gallery</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {GALLERY_ITEMS.map((item) => (
+          <GalleryItemCard key={item.id} item={item} onVote={() => {}} />
         ))}
       </div>
-
-      <div className="flex gap-3">
-        <div className="flex-1 flex flex-col gap-3">
-          {left.map((item) => (
-            <GalleryItemCard key={item.id} item={item} onVote={() => toggleVote(item.id)} />
-          ))}
-        </div>
-        <div className="flex-1 flex flex-col gap-3 mt-8">
-          {right.map((item) => (
-            <GalleryItemCard key={item.id} item={item} onVote={() => toggleVote(item.id)} />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
 
-// ─── Screen 8: Leaderboard ────────────────────────────────────────────────────
-
-function LeaderboardScreen() {
-  const [period, setPeriod] = useState<"weekly" | "monthly" | "alltime">("monthly");
-  const totalPrize = DROPS.reduce((s, d) => s + d.prizePool, 0);
-
+function LeaderboardScreen({ navigate }: NavProps) {
   return (
-    <div>
-      <div className="relative bg-gradient-to-b from-slate-950 via-[#1e1048] to-[#2d1065] px-4 pt-10 pb-0 overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10">
-          <h1 className="text-2xl font-bold text-white mb-0.5" style={{ fontFamily: "var(--font-display)" }}>Leaderboard</h1>
-          <p className="text-slate-400 text-sm mb-5">
-            Season prize pool: <span className="text-violet-300 font-bold">€{totalPrize.toLocaleString()}</span>
-          </p>
-
-          <div className="flex gap-1 bg-white/10 rounded-2xl p-1 mb-8">
-            {(["weekly", "monthly", "alltime"] as const).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                className={cn("flex-1 h-9 rounded-xl text-sm font-semibold transition-all",
-                  period === p ? "bg-white text-slate-900" : "text-white/70 hover:text-white"
-                )}
-              >
-                {p === "weekly" ? "Weekly" : p === "monthly" ? "Monthly" : "All Time"}
-              </button>
-            ))}
+    <div className="px-4 py-6 max-w-4xl mx-auto space-y-6">
+      <h1 className="text-2xl font-black uppercase">Leaderboard</h1>
+      <div className="bg-card border border-border rounded-3xl p-4 divide-y divide-border">
+        {LEADERBOARD.map((item) => (
+          <div key={item.rank} className="flex items-center justify-between py-3">
+            <div className="flex items-center gap-3">
+              <span className="font-black text-sm w-5">{item.rank}</span>
+              <img src={item.avatar} alt={item.name} className="w-8 h-8 rounded-full object-cover" />
+              <div>
+                <div className="text-xs font-bold">{item.name}</div>
+                <div className="text-[10px] text-muted-foreground">{item.badge}</div>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-violet-600">{item.points} pts</span>
           </div>
-
-          {/* Podium */}
-          <div className="flex items-end justify-center gap-3 pb-0">
-            <div className="flex flex-col items-center">
-              <img src={LEADERBOARD[1].avatar} alt={LEADERBOARD[1].name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-400 bg-muted" />
-              <div className="mt-1.5 text-white text-xs font-bold">{LEADERBOARD[1].name.split(" ")[0]}</div>
-              <div className="text-slate-300 text-[10px]">{LEADERBOARD[1].points.toLocaleString()} pts</div>
-              <div className="w-16 h-10 bg-slate-600/40 rounded-t-xl flex items-center justify-center mt-2">
-                <span className="text-slate-300 font-bold text-lg">2</span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center -mt-4">
-              <Crown size={18} className="text-yellow-400 mb-1" />
-              <img src={LEADERBOARD[0].avatar} alt={LEADERBOARD[0].name} className="w-16 h-16 rounded-full object-cover border-[3px] border-yellow-400 bg-muted" />
-              <div className="mt-1.5 text-white text-sm font-bold">{LEADERBOARD[0].name.split(" ")[0]}</div>
-              <div className="text-yellow-300 text-[10px]">{LEADERBOARD[0].points.toLocaleString()} pts</div>
-              <div className="w-20 h-14 bg-yellow-500/20 rounded-t-xl flex items-center justify-center mt-2 border-t border-yellow-400/30">
-                <span className="text-yellow-300 font-bold text-2xl">1</span>
-              </div>
-            </div>
-            <div className="flex flex-col items-center">
-              <img src={LEADERBOARD[2].avatar} alt={LEADERBOARD[2].name} className="w-12 h-12 rounded-full object-cover border-2 border-amber-600 bg-muted" />
-              <div className="mt-1.5 text-white text-xs font-bold">{LEADERBOARD[2].name.split(" ")[0]}</div>
-              <div className="text-slate-300 text-[10px]">{LEADERBOARD[2].points.toLocaleString()} pts</div>
-              <div className="w-16 h-6 bg-amber-700/30 rounded-t-xl flex items-center justify-center mt-2">
-                <span className="text-amber-500 font-bold text-lg">3</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="px-4 py-6 space-y-5">
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { label: "Season Prize", value: `€${totalPrize.toLocaleString()}`, icon: Crown },
-            { label: "Creators", value: "134", icon: Users },
-            { label: "Active Drops", value: `${LIVE_DROPS.length}`, icon: Trophy },
-          ].map((s) => (
-            <div key={s.label} className="bg-card border border-border rounded-2xl p-3 text-center">
-              <s.icon size={16} className="text-primary mx-auto mb-1" />
-              <div className="font-bold text-foreground text-base leading-none mb-0.5">{s.value}</div>
-              <div className="text-[10px] text-muted-foreground">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <h2 className="font-bold text-foreground">Rankings</h2>
-        <div className="space-y-2">
-          {LEADERBOARD.map((u, i) => (
-            <div
-              key={u.rank}
-              className={cn("flex items-center gap-3 p-4 rounded-3xl border",
-                i < 3 ? "bg-card border-primary/15 shadow-sm" : "bg-card border-border"
-              )}
-            >
-              <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0",
-                i === 0 ? "bg-yellow-100 text-yellow-700" :
-                i === 1 ? "bg-slate-100 text-slate-600" :
-                i === 2 ? "bg-amber-50 text-amber-700" :
-                "bg-muted text-muted-foreground"
-              )}>
-                {u.rank}
-              </div>
-              <img src={u.avatar} alt={u.name} className="w-10 h-10 rounded-full object-cover bg-muted flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm text-foreground truncate">{u.name}</div>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <Badge variant={u.badge === "Grandmaster" ? "purple" : u.badge === "Expert" ? "success" : "default"}>
-                    {u.badge}
-                  </Badge>
-                  <span className="text-xs text-muted-foreground">{u.wins} wins</span>
-                </div>
-              </div>
-              <div className="text-right flex-shrink-0">
-                <div className="font-bold text-foreground text-sm">{u.points.toLocaleString()}</div>
-                {u.earnings > 0 && (
-                  <div className="text-xs font-bold text-violet-600">€{u.earnings.toLocaleString()}</div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   );
 }
-
-// ─── Screen 9: Profile ────────────────────────────────────────────────────────
 
 function ProfileScreen({ navigate }: NavProps) {
   return (
-    <div>
-      <div className="relative h-36 bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 overflow-hidden">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-        <button className="absolute top-4 right-4 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center" onClick={() => navigate("settings")}>
-          <Settings size={16} className="text-white" />
-        </button>
-        <button className="absolute top-4 right-14 w-9 h-9 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-          <Bell size={16} className="text-white" />
-        </button>
-      </div>
-
-      <div className="px-4 pb-8">
-        <div className="flex items-end justify-between -mt-8 mb-5">
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&auto=format"
-              alt="Profile"
-              className="w-20 h-20 rounded-3xl border-4 border-background object-cover bg-muted shadow-md"
-            />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-xl flex items-center justify-center border-2 border-background">
-              <Crown size={11} className="text-white" />
-            </div>
-          </div>
-          <div className="flex gap-2 mb-1">
-            <Btn variant="outline" size="sm" onClick={() => navigate("dashboard")}>Dashboard</Btn>
-            <Btn size="sm"><Edit size={13} /> Edit</Btn>
-          </div>
+    <div className="px-4 py-6 max-w-md mx-auto space-y-6">
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 rounded-full bg-lime-400 border-2 border-black flex items-center justify-center font-black text-xl">
+          AW
         </div>
-
-        <h1 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>Sofia Martinez</h1>
-        <p className="text-sm text-muted-foreground mb-1">@sofia_creates &middot; Paris, France</p>
-        <p className="text-sm text-foreground leading-relaxed mb-5 max-w-xs">
-          Visual artist. Participated in DROP #001, #002 and #003. Won DROP #001 — Tote Bag. Grandmaster creator.
-        </p>
-
-        <div className="grid grid-cols-4 gap-2 mb-6">
-          {[{ value: "4,820", label: "Points" }, { value: "2", label: "Wins" }, { value: "3", label: "Drops" }, { value: "2.4k", label: "Likes" }].map((s) => (
-            <div key={s.label} className="text-center bg-muted rounded-2xl py-3">
-              <div className="font-bold text-foreground text-base leading-none mb-0.5">{s.value}</div>
-              <div className="text-[10px] text-muted-foreground">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <h2 className="font-bold text-foreground mb-3">Badges</h2>
-        <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-hide -mx-4 px-4">
-          {[
-            { icon: "🏆", name: "Drop #001 Winner" },
-            { icon: "👜", name: "Tote Creator" },
-            { icon: "🎭", name: "Balaclava" },
-            { icon: "🦊", name: "Fox Painter" },
-            { icon: "👑", name: "Grandmaster" },
-          ].map((a) => (
-            <div key={a.name} className="flex-shrink-0 flex flex-col items-center gap-2 w-20 p-3 rounded-2xl bg-primary/5 border border-primary/15">
-              <span className="text-2xl">{a.icon}</span>
-              <span className="text-[10px] font-bold text-primary text-center leading-tight">{a.name}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-foreground">Creations</h2>
-          <span className="text-xs text-muted-foreground font-medium">3 submissions</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          {GALLERY_ITEMS.slice(0, 6).map((item) => (
-            <div key={item.id} className="aspect-square rounded-2xl overflow-hidden bg-muted relative group cursor-pointer">
-              <img src={item.image} alt="" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
-                <div className="flex items-center gap-1 text-white text-[10px] font-semibold">
-                  <Heart size={10} className="fill-white" /> {item.likes}
-                </div>
-              </div>
-            </div>
-          ))}
+        <div>
+          <h1 className="text-xl font-black uppercase">Creator Profile</h1>
+          <p className="text-xs font-semibold text-muted-foreground">Member since 2026</p>
         </div>
       </div>
+      <Btn variant="outline" fullWidth onClick={() => navigate("settings")}>
+        <Settings size={16} /> Account Settings
+      </Btn>
     </div>
   );
 }
-
-// ─── Screen 10: Settings ──────────────────────────────────────────────────────
 
 function SettingsScreen({ navigate }: NavProps) {
-  const [notifs, setNotifs] = useState({ newDrops: true, voteReminders: true, winAlerts: true, marketing: false });
-  const [privacy, setPrivacy] = useState({ publicProfile: true, showActivity: true });
-
   return (
-    <div className="px-4 py-4 pb-12">
-      <div className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate("profile")} className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted">
-          <ChevronLeft size={18} />
-        </button>
-        <h1 className="text-xl font-bold text-foreground">Settings</h1>
-      </div>
-
-      <div className="bg-card border border-border rounded-3xl p-4 flex items-center gap-4 mb-7">
-        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&auto=format" alt="Profile" className="w-14 h-14 rounded-2xl object-cover bg-muted flex-shrink-0" />
-        <div className="flex-1 min-w-0">
-          <div className="font-bold text-foreground">Sofia Martinez</div>
-          <div className="text-sm text-muted-foreground truncate">sofia@email.com</div>
-          <Badge variant="purple" className="mt-1.5">Grandmaster</Badge>
-        </div>
-        <ChevronRight size={15} className="text-muted-foreground flex-shrink-0" />
-      </div>
-
-      <SettingsSection title="Notifications">
-        <SettingsRow icon={Bell} label="New Drops" desc="When a new Drop goes live" toggle checked={notifs.newDrops} onToggle={(v) => setNotifs({ ...notifs, newDrops: v })} />
-        <SettingsRow icon={Clock} label="Vote Reminders" desc="When voting is about to close" toggle checked={notifs.voteReminders} onToggle={(v) => setNotifs({ ...notifs, voteReminders: v })} />
-        <SettingsRow icon={Trophy} label="Win Alerts" desc="When you win a prize" toggle checked={notifs.winAlerts} onToggle={(v) => setNotifs({ ...notifs, winAlerts: v })} />
-        <SettingsRow icon={Star} label="Marketing" desc="Promotions and early-access news" toggle checked={notifs.marketing} onToggle={(v) => setNotifs({ ...notifs, marketing: v })} />
-      </SettingsSection>
-
-      <SettingsSection title="Privacy">
-        <SettingsRow icon={User} label="Public Profile" desc="Anyone can view your profile" toggle checked={privacy.publicProfile} onToggle={(v) => setPrivacy({ ...privacy, publicProfile: v })} />
-        <SettingsRow icon={Eye} label="Show Activity" desc="Display your drop participation" toggle checked={privacy.showActivity} onToggle={(v) => setPrivacy({ ...privacy, showActivity: v })} />
-      </SettingsSection>
-
-      <SettingsSection title="Account">
-        <SettingsRow icon={CreditCard} label="Payment Methods" />
-        <SettingsRow icon={MapPin} label="Saved Addresses" />
-        <SettingsRow icon={Award} label="Membership & Plan" />
-        <SettingsRow icon={HelpCircle} label="Help & Support" />
-      </SettingsSection>
-
-      <button className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-destructive/30 text-destructive font-semibold text-sm mt-2 mb-6 hover:bg-destructive/5 transition-colors">
-        <LogOut size={15} /> Log Out
+    <div className="px-4 py-6 max-w-md mx-auto space-y-6">
+      <button onClick={() => navigate("profile")} className="flex items-center gap-1 text-xs font-bold text-muted-foreground">
+        <ChevronLeft size={16} /> Back to profile
       </button>
+      <h1 className="text-2xl font-black uppercase">Settings</h1>
+      <SettingsSection title="Notifications">
+        <SettingsRow icon={Bell} label="Push Notifications" toggle checked={true} onToggle={() => {}} />
+      </SettingsSection>
     </div>
   );
 }
 
-// ─── Bottom Navigation ────────────────────────────────────────────────────────
-
-const NAV_TABS = [
-  { screen: "landing" as Screen, icon: Home, label: "Home" },
-  { screen: "catalog" as Screen, icon: Search, label: "Drops" },
-  { screen: "gallery" as Screen, icon: ImageIcon, label: "Gallery" },
-  { screen: "leaderboard" as Screen, icon: Trophy, label: "Ranks" },
-  { screen: "profile" as Screen, icon: User, label: "Profile" },
-];
-
-function getActiveTab(screen: Screen): Screen {
-  if (screen === "detail" || screen === "checkout") return "catalog";
-  if (screen === "upload") return "gallery";
-  if (screen === "dashboard" || screen === "settings") return "profile";
-  return screen;
-}
-
-function BottomNav({ active, navigate }: { active: Screen; navigate: (screen: Screen) => void }) {
-  const activeTab = getActiveTab(active);
-  const liveDots = LIVE_DROPS.length;
-  return (
-    <div className="flex-shrink-0 bg-background/95 backdrop-blur-md border-t border-border">
-      <div className="flex items-center px-2 py-1">
-        {NAV_TABS.map((tab) => {
-          const isActive = activeTab === tab.screen;
-          return (
-            <button
-              key={tab.screen}
-              onClick={() => navigate(tab.screen)}
-              className={cn("flex-1 flex flex-col items-center gap-0.5 py-2 transition-all duration-150", isActive ? "text-primary" : "text-muted-foreground hover:text-foreground")}
-            >
-              <div className={cn("relative w-10 h-7 flex items-center justify-center rounded-xl transition-all duration-150", isActive ? "bg-primary/10" : "bg-transparent")}>
-                <tab.icon size={19} strokeWidth={isActive ? 2.5 : 1.8} />
-                {tab.screen === "catalog" && !isActive && (
-                  <span className="absolute top-0.5 right-0.5 w-2 h-2 bg-emerald-500 rounded-full border border-background" />
-                )}
-              </div>
-              <span className="text-[10px] font-semibold">{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ─── App ─────────────────────────────────────────────────────────────────────
+// ─── Main App Component ───────────────────────────────────────────────────────
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("landing");
+  const [currentScreen, setCurrentScreen] = useState<Screen>("landing");
   const [navData, setNavData] = useState<Record<string, unknown>>({});
 
-  const navigate = (s: Screen, data?: Record<string, unknown>) => {
-    setScreen(s);
-    setNavData(data ?? {});
-    const main = document.getElementById("app-main");
-    if (main) main.scrollTop = 0;
+  const navigate = (screen: Screen, data?: Record<string, unknown>) => {
+    if (data) setNavData(data);
+    setCurrentScreen(screen);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const props: NavProps = { navigate, navData };
-
   return (
-    <div className="min-h-screen bg-slate-900 sm:flex sm:items-center sm:justify-center sm:py-8">
-      <div className="relative w-full sm:max-w-[430px] min-h-screen sm:min-h-0 sm:h-[900px] bg-background flex flex-col sm:rounded-[40px] sm:overflow-hidden shadow-2xl">
-        <main id="app-main" className="flex-1 overflow-y-auto scrollbar-hide">
-          {screen === "landing" && <LandingScreen {...props} />}
-          {screen === "catalog" && <CatalogScreen {...props} />}
-          {screen === "detail" && <DetailScreen {...props} />}
-          {screen === "checkout" && <CheckoutScreen {...props} />}
-          {screen === "dashboard" && <DashboardScreen {...props} />}
-          {screen === "upload" && <UploadScreen {...props} />}
-          {screen === "gallery" && <GalleryScreen {...props} />}
-          {screen === "leaderboard" && <LeaderboardScreen />}
-          {screen === "profile" && <ProfileScreen {...props} />}
-          {screen === "settings" && <SettingsScreen {...props} />}
-        </main>
-        <BottomNav active={screen} navigate={navigate} />
-      </div>
+    <div className="min-h-screen bg-background text-foreground font-sans pb-20 md:pb-0">
+      <HeaderHero />
+
+      <main>
+        {currentScreen === "landing" && <LandingScreen navigate={navigate} />}
+        {currentScreen === "catalog" && <CatalogScreen navigate={navigate} />}
+        {currentScreen === "detail" && <DetailScreen navigate={navigate} navData={navData} />}
+        {currentScreen === "checkout" && <CheckoutScreen navigate={navigate} navData={navData} />}
+        {currentScreen === "dashboard" && <DashboardScreen navigate={navigate} />}
+        {currentScreen === "upload" && <UploadScreen navigate={navigate} />}
+        {currentScreen === "gallery" && <GalleryScreen navigate={navigate} />}
+        {currentScreen === "leaderboard" && <LeaderboardScreen navigate={navigate} />}
+        {currentScreen === "profile" && <ProfileScreen navigate={navigate} />}
+        {currentScreen === "settings" && <SettingsScreen navigate={navigate} />}
+      </main>
+
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border px-4 py-2 flex justify-around items-center md:hidden">
+        <button onClick={() => navigate("landing")} className={cn("flex flex-col items-center gap-1 p-2", currentScreen === "landing" ? "text-primary" : "text-muted-foreground")}>
+          <Home size={20} />
+          <span className="text-[10px] font-bold">Home</span>
+        </button>
+        <button onClick={() => navigate("catalog")} className={cn("flex flex-col items-center gap-1 p-2", currentScreen === "catalog" ? "text-primary" : "text-muted-foreground")}>
+          <Search size={20} />
+          <span className="text-[10px] font-bold">Drops</span>
+        </button>
+        <button onClick={() => navigate("gallery")} className={cn("flex flex-col items-center gap-1 p-2", currentScreen === "gallery" ? "text-primary" : "text-muted-foreground")}>
+          <ImageIcon size={20} />
+          <span className="text-[10px] font-bold">Gallery</span>
+        </button>
+        <button onClick={() => navigate("leaderboard")} className={cn("flex flex-col items-center gap-1 p-2", currentScreen === "leaderboard" ? "text-primary" : "text-muted-foreground")}>
+          <Trophy size={20} />
+          <span className="text-[10px] font-bold">Ranks</span>
+        </button>
+        <button onClick={() => navigate("profile")} className={cn("flex flex-col items-center gap-1 p-2", currentScreen === "profile" ? "text-primary" : "text-muted-foreground")}>
+          <User size={20} />
+          <span className="text-[10px] font-bold">Profile</span>
+        </button>
+      </nav>
     </div>
   );
 }
