@@ -7,7 +7,44 @@ import { CheckoutScreen } from './components/CheckoutScreen';
 import { ConfirmationScreen } from './components/ConfirmationScreen';
 import { GalleryScreen } from './components/GalleryScreen';
 import { ProfileScreen } from './components/ProfileScreen';
+const [usedTokens, setUsedTokens] = useState<string[]>(() => {
+  try {
+    const saved = localStorage.getItem('ascend_used_tokens');
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+});
 
+const [claimParams, setClaimParams] = useState<{ dropId: string; token: string } | null>(null);
+
+// Intercepter les paramètres de QR code au lancement
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const dropId = params.get('dropId');
+  const token = params.get('token');
+
+  if (dropId && token) {
+    setClaimParams({ dropId, token });
+  }
+}, []);
+
+const handleClaimComplete = (photos: string[], author: string) => {
+  if (!claimParams) return;
+
+  // 1. Marquer le token comme brûlé/invalide
+  const updatedTokens = [...usedTokens, claimParams.token];
+  setUsedTokens(updatedTokens);
+  localStorage.setItem('ascend_used_tokens', JSON.stringify(updatedTokens));
+
+  // 2. Publier les photos sur le drop dans la Galerie
+  // ... (mise à jour du state des drops)
+
+  // 3. Nettoyer l'URL
+  window.history.replaceState({}, document.title, window.location.pathname);
+  setClaimParams(null);
+  setCurrentScreen('gallery');
+};
 const INITIAL_DROPS: Drop[] = [
   { 
     id: '001', 
