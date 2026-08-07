@@ -34,3 +34,8 @@ export interface GalleryDropItem {
   endsAtSeconds: number; // Temps restant en secondes pour les drops actifs
   submissions: GallerySubmission[];
 }
+export interface SubmissionClaim {
+  dropId: string;
+  token: string;
+  photos: string[];
+}
