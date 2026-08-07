@@ -1,28 +1,28 @@
 import React from 'react';
 
-interface VotingScreenProps {
+interface GalleryScreenProps {
   votedIds: string[];
   onVote: (creationId: string) => void;
 }
 
 const CREATIONS = [
-  { id: 'A01', title: 'PROTOTYPE A — CONCEPT TACTICAL', author: 'ALEX' },
-  { id: 'A02', title: 'PROTOTYPE B — MINIMALIST EDITION', author: 'SARAH' },
+  { id: 'A01', title: 'PROTOTYPE A — TACTICAL GEAR', author: 'ALEX' },
+  { id: 'A02', title: 'PROTOTYPE B — MINIMALIST FRAME', author: 'SARAH' },
   { id: 'A03', title: 'PROTOTYPE C — URBAN RUNNER', author: 'LUCAS' },
 ];
 
-export const VotingScreen: React.FC<VotingScreenProps> = ({ votedIds, onVote }) => {
+export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }) => {
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-white/10 pb-6 gap-4">
         <div>
-          <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Arène // Community Vote</span>
+          <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Vault // Exhibition</span>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white uppercase mt-1">
-            VOX POPULI
+            PROJECT GALLERY
           </h2>
         </div>
         <div className="text-xs font-mono text-neutral-400">
-          Chaque vote rapporte <span className="text-[#00FF87] font-bold">+50 PTS</span>
+          Curate upcoming drops <span className="text-[#00FF87] font-bold">+50 PTS</span>
         </div>
       </div>
 
@@ -35,7 +35,7 @@ export const VotingScreen: React.FC<VotingScreenProps> = ({ votedIds, onVote }) 
               className="bg-[#12141A] rounded-2xl border border-white/10 hover:border-white/20 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all duration-200 shadow-lg"
             >
               <div>
-                <span className="text-[10px] font-mono text-neutral-500 uppercase">Création #{item.id} — Par {item.author}</span>
+                <span className="text-[10px] font-mono text-neutral-500 uppercase">Archived Concept #{item.id} — By {item.author}</span>
                 <h3 className="text-lg font-black text-white uppercase mt-0.5">{item.title}</h3>
               </div>
 
@@ -48,7 +48,7 @@ export const VotingScreen: React.FC<VotingScreenProps> = ({ votedIds, onVote }) 
                     : 'bg-[#00FF87] hover:bg-[#00E077] text-black shadow-[0_0_20px_rgba(0,255,135,0.2)]'
                 }`}
               >
-                {hasVoted ? 'Voté ✓' : 'Voter (+50 PTS)'}
+                {hasVoted ? 'Endorsed ✓' : 'Endorse (+50 PTS)'}
               </button>
             </div>
           );
@@ -57,3 +57,5 @@ export const VotingScreen: React.FC<VotingScreenProps> = ({ votedIds, onVote }) 
     </div>
   );
 };
+
+export default GalleryScreen;
