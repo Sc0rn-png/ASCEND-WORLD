@@ -1,4 +1,4 @@
-export type Screen = 'home' | 'auth' | 'catalog' | 'detail' | 'checkout' | 'confirmation' | 'voting' | 'profile';
+export type Screen = 'home' | 'auth' | 'catalog' | 'detail' | 'checkout' | 'confirmation' | 'gallery' | 'profile';
 
 export interface User {
   name: string;
@@ -16,5 +16,6 @@ export interface Drop {
   status: 'live' | 'coming_soon';
   imageUrl: string;
   category: string;
-  progressPercent: number;
+  currentParticipants: number;
+  maxParticipants: number;
 }
