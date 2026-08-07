@@ -19,3 +19,18 @@ export interface Drop {
   currentParticipants: number;
   maxParticipants: number;
 }
+export interface GallerySubmission {
+  id: string;
+  imageUrl: string;
+  author: string;
+  votes: number;
+}
+
+export interface GalleryDropItem {
+  id: string;
+  title: string;
+  boxImageUrl: string; // Image de la box / packaging
+  status: 'active' | 'completed';
+  endsAtSeconds: number; // Temps restant en secondes pour les drops actifs
+  submissions: GallerySubmission[];
+}
