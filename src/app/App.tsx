@@ -14,91 +14,91 @@ import Navbar from './components/Navbar';
 const INITIAL_DROPS: Drop[] = [
   { 
     id: '001', 
-    title: 'EXTRACT PROTOCOL #01', 
+    title: 'CUSTOM SNEAKER KIT #01', 
     price: 35, 
-    description: 'Priority access to physical prototype batch zero. Numbered tactical gear limited to 50 units worldwide.', 
+    description: 'Raw white low-top sneaker canvas equipped with premium acrylic paint set, prep solution, and custom stencils.', 
     status: 'live',
-    category: 'HARDWARE / GEAR',
+    category: 'FOOTWEAR / CUSTOM',
     currentParticipants: 38,
     maxParticipants: 50,
-    imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=1000'
+    imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '002', 
-    title: 'CREATOR APPAREL KIT', 
-    price: 50, 
-    description: 'Heavyweight 450 GSM organic cotton streetwear bundle featuring brushed aluminum emblems.', 
-    status: 'coming_soon',
+    title: 'TACTICAL BALACLAVA MASK', 
+    price: 25, 
+    description: 'Heavyweight knit tactical balaclava designed for custom embroidery, patch attachments, and textile alterations.', 
+    status: 'live',
     category: 'STREETWEAR / APPAREL',
     currentParticipants: 12,
     maxParticipants: 100,
-    imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000'
+    imageUrl: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '003', 
-    title: 'KEYCARD PASS v1.0', 
-    price: 80, 
-    description: 'Physical and digital access pass unlocking gallery voting rights and secret drop allocations.', 
+    title: 'HEAVYWEIGHT 500 GSM HOODIE', 
+    price: 50, 
+    description: 'Ultra-dense organic cotton blank hoodie with dropped shoulders, primed for screen printing and distress work.', 
     status: 'live',
-    category: 'ACCESS / PASS',
-    currentParticipants: 84,
-    maxParticipants: 100,
-    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
+    category: 'STREETWEAR / APPAREL',
+    currentParticipants: 75,
+    maxParticipants: 80,
+    imageUrl: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '004', 
-    title: 'NEON RESIN FIGURINE #00', 
-    price: 120, 
-    description: 'HD resin printed collectible figurine, hand-painted. Shipped with certificate of authenticity.', 
+    title: 'UNPAINTED RESIN FIGURE', 
+    price: 45, 
+    description: '10-inch high-detail unpainted prime resin figurine ready for airbrushing, hand painting, and panel lining.', 
     status: 'coming_soon',
-    category: 'ART / SCULPTURE',
-    currentParticipants: 5,
-    maxParticipants: 25,
+    category: 'COLLECTIBLES / ART',
+    currentParticipants: 0,
+    maxParticipants: 40,
     imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '005', 
-    title: 'TACTICAL SLING BAG', 
-    price: 65, 
-    description: 'Waterproof Cordura urban sling featuring Cobra magnetic buckles and modular storage compartments.', 
-    status: 'live',
-    category: 'HARDWARE / GEAR',
-    currentParticipants: 41,
-    maxParticipants: 60,
-    imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=1000'
+    title: 'RAW CANVAS TOTE BAG', 
+    price: 20, 
+    description: 'Extra-thick 16oz raw natural cotton tote bag with reinforced handles, designed for graphic print & paint customization.', 
+    status: 'coming_soon',
+    category: 'ACCESSORIES / GEAR',
+    currentParticipants: 0,
+    maxParticipants: 150,
+    imageUrl: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '006', 
-    title: 'SEASON 01 SOUNDTRACK LP', 
-    price: 40, 
-    description: 'Limited vinyl edition on transparent violet vinyl. Screenprinted sleeve artwork by the community.', 
+    title: 'STRUCTURED CANVAS CAP', 
+    price: 22, 
+    description: 'Minimalist 6-panel strapback cap in matte finish, structured for custom pins, patches, and fabric dye.', 
     status: 'coming_soon',
-    category: 'MEDIA / AUDIO',
-    currentParticipants: 18,
-    maxParticipants: 150,
-    imageUrl: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=1000'
+    category: 'HEADWEAR / ACCESSORIES',
+    currentParticipants: 0,
+    maxParticipants: 60,
+    imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '007', 
-    title: 'GICLÉE PRINT - "ASCENSION"', 
-    price: 45, 
-    description: 'Large format fine art giclée print on FineArt 310g paper, signed and stamped with UV ink.', 
-    status: 'live',
-    category: 'ART / PRINT',
-    currentParticipants: 29,
-    maxParticipants: 40,
-    imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=1000'
+    title: 'ACRYLIC DECK VAULT & CASE', 
+    price: 30, 
+    description: 'Crystal-clear magnetic UV acrylic display case and deck box designed for custom engraving and card showcases.', 
+    status: 'coming_soon',
+    category: 'GAMING / COLLECTIBLES',
+    currentParticipants: 0,
+    maxParticipants: 50,
+    imageUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7041?auto=format&fit=crop&q=80&w=1000'
   },
   { 
     id: '008', 
-    title: 'MODULAR UTILITY JACKET', 
-    price: 110, 
-    description: 'Breathable technical jacket featuring interchangeable velcro patches and reflective details.', 
+    title: 'VINTAGE WASH DENIM JACKET', 
+    price: 65, 
+    description: 'Heavy 14oz washed indigo denim jacket with clean back panel for custom bleach work, backpatches, and paint.', 
     status: 'coming_soon',
-    category: 'STREETWEAR / APPAREL',
-    currentParticipants: 44,
-    maxParticipants: 80,
-    imageUrl: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=1000'
+    category: 'OUTERWEAR / CUSTOM',
+    currentParticipants: 0,
+    maxParticipants: 30,
+    imageUrl: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&q=80&w=1000'
   }
 ];
 
