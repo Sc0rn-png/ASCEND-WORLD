@@ -18,8 +18,10 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
     Math.round((drop.currentParticipants / drop.maxParticipants) * 100)
   );
 
-  // Calcul dynamique du Cash Prize : 5€ par slot
-  const cashPrize = drop.maxParticipants * 5;
+  // Calcul du Cash Prize : 5€ par participation
+  const entryFeeContribution = 5;
+  const currentCashPrize = drop.currentParticipants * entryFeeContribution;
+  const maxCashPrize = drop.maxParticipants * entryFeeContribution;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -58,7 +60,7 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
         {/* Détails du Drop */}
         <div className="p-6 sm:p-8 space-y-6">
           
-          {/* Categorie & Titre dynamiques */}
+          {/* Categorie & Titre */}
           <div className="space-y-2">
             <p className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400">
               {drop.category}
@@ -71,32 +73,37 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
             </p>
           </div>
 
-          {/* Cartes d'informations */}
+          {/* Cartes d'informations (Cash Prize & Disponibilité) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             
-            {/* Cash Prize calculé */}
+            {/* Cash Prize Actuel & Max */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-                Cash Prize
+                Cash Prize Pool
               </span>
-              <p className="text-lg font-mono font-bold text-cyan-300">
-                €{cashPrize}
-              </p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-mono font-bold text-cyan-300">
+                  €{currentCashPrize}
+                </span>
+                <span className="text-xs font-mono text-neutral-400">
+                  / €{maxCashPrize} MAX
+                </span>
+              </div>
               <p className="text-[10px] text-neutral-400">
-                Awarded to most liked creation
+                Awarded to the most liked creation
               </p>
             </div>
 
-            {/* Disponibilité */}
+            {/* Availability */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
                 Availability
               </span>
-              <p className="text-lg font-mono font-bold text-white">
+              <p className="text-xl font-mono font-bold text-white">
                 {drop.maxParticipants} slots
               </p>
               <p className="text-[10px] text-neutral-400">
-                5€ / slot added to prize pool
+                €5 per entry allocated to cash prize
               </p>
             </div>
           </div>
