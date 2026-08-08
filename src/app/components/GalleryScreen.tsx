@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { GalleryDropItem, GallerySubmission } from '../types';
 
-// Mock Data avec images de Box et de participations
+// Mock Data with Box and submission images
 const INITIAL_GALLERY_DROPS: GalleryDropItem[] = [
   {
     id: 'D01',
     title: 'EXTRACT PROTOCOL #01',
     boxImageUrl: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800',
     status: 'active',
-    endsAtSeconds: 14400, // 4 heures
+    endsAtSeconds: 14400, // 4 hours
     submissions: [
       { id: 'S01', imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=800', author: '@KAI_99', votes: 142 },
       { id: 'S02', imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800', author: '@NEO_TACTICAL', votes: 118 },
@@ -44,7 +44,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
 
   const selectedDrop = drops.find(d => d.id === selectedDropId);
 
-  // Timer en direct pour le drop actif sélectionné
+  // Countdown timer for active selected drop
   const [timeLeft, setTimeLeft] = useState<number>(selectedDrop?.endsAtSeconds || 0);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [selectedDropId]);
+  }, [selectedDropId, selectedDrop]);
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -81,11 +81,9 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
     onVote(submissionId);
   };
 
-  // --- VUE 1 : VUE DÉTAILLÉE D'UN DROP (PHOTOS PARTICIPANTS) ---
+  // --- VIEW 1: DETAILED VIEW OF A DROP (PARTICIPANT SUBMISSIONS) ---
   if (selectedDrop) {
-    // Trier les participations par ordre décroissant de votes
     const sortedSubmissions = [...selectedDrop.submissions].sort((a, b) => b.votes - a.votes);
-    // Si archivé : garder UNIQUEMENT le Top 5
     const displayedSubmissions = selectedDrop.status === 'completed' 
       ? sortedSubmissions.slice(0, 5) 
       : sortedSubmissions;
@@ -93,7 +91,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
     return (
       <div className="space-y-6">
         
-        {/* Navigation Retour & Timer */}
+        {/* Back Navigation & Status */}
         <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
           <button 
             onClick={() => setSelectedDropId(null)}
@@ -107,7 +105,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
           </span>
         </div>
 
-        {/* TIMER BANNER (Uniquement sur les Drops Actifs) */}
+        {/* TIMER BANNER (Active Drops Only) */}
         {selectedDrop.status === 'active' && (
           <div className="bg-[#12141A] rounded-2xl border border-[#00FF87]/30 p-4 sm:p-6 text-center space-y-1 shadow-[0_0_30px_rgba(0,255,135,0.08)] relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00FF87] to-transparent" />
@@ -123,7 +121,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
           </div>
         )}
 
-        {/* En-tête du Drop sélectionné */}
+        {/* Selected Drop Header */}
         <div>
           <h2 className="text-2xl font-black text-white uppercase">{selectedDrop.title}</h2>
           <p className="text-xs text-neutral-400 mt-1 font-mono">
@@ -131,7 +129,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
           </p>
         </div>
 
-        {/* MASONRY / PINTEREST GRID (2 Colonnes Quinconce) */}
+        {/* MASONRY GRID */}
         <div className="columns-2 gap-3 space-y-3">
           {displayedSubmissions.map((item, index) => {
             const rank = index + 1;
@@ -142,17 +140,17 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
                 key={item.id} 
                 className="break-inside-avoid relative group rounded-xl overflow-hidden bg-[#12141A] border border-white/10 hover:border-white/30 transition-all duration-300 shadow-lg"
               >
-                {/* Image du participant */}
+                {/* Submission Image */}
                 <img 
                   src={item.imageUrl} 
                   alt={item.author} 
                   className="w-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
 
-                {/* Overlays / Badges */}
+                {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90 transition-opacity" />
 
-                {/* Rank Badge (Top 1, 2, 3 pour Active / Top 1 à 5 pour Completed) */}
+                {/* Rank Badges */}
                 {((selectedDrop.status === 'active' && rank <= 3) || selectedDrop.status === 'completed') && (
                   <div className="absolute top-2 left-2">
                     <span className={`text-[10px] font-mono font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-wider backdrop-blur-md border ${
@@ -166,7 +164,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
                   </div>
                 )}
 
-                {/* Pied d'image : Info & Vote Button */}
+                {/* Card Footer: Info & Vote Button */}
                 <div className="absolute bottom-2 left-2 right-2 flex flex-col justify-end gap-1.5">
                   <div className="flex justify-between items-end">
                     <span className="text-[11px] font-bold text-white tracking-wide truncate">{item.author}</span>
@@ -196,7 +194,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
     );
   }
 
-  // --- VUE 2 : LISTE DES DROPS EN COURS & ARCHIVÉS (COVER BOX) ---
+  // --- VIEW 2: LIST OF ACTIVE & ARCHIVED DROPS (COVER BOXES) ---
   const activeDrops = drops.filter(d => d.status === 'active');
   const pastDrops = drops.filter(d => d.status === 'completed');
 
@@ -216,7 +214,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
         </div>
       </div>
 
-      {/* SECTION 1 : DROPS EN COURS (Live Boxes) */}
+      {/* ACTIVE DROPS SECTION */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#00FF87] animate-pulse" />
@@ -230,7 +228,6 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
               onClick={() => setSelectedDropId(drop.id)}
               className="group relative cursor-pointer rounded-2xl overflow-hidden bg-[#12141A] border border-white/10 hover:border-white/30 transition-all duration-300 shadow-lg hover:-translate-y-1"
             >
-              {/* Image de Couverture Box */}
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-black">
                 <img 
                   src={drop.boxImageUrl} 
@@ -239,7 +236,6 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#12141A] via-transparent to-black/30" />
                 
-                {/* Badge Status */}
                 <div className="absolute top-2.5 left-2.5">
                   <span className="text-[9px] font-mono font-bold tracking-wider text-[#00FF87] bg-black/60 px-2 py-0.5 rounded border border-[#00FF87]/30 backdrop-blur-md uppercase">
                     • LIVE
@@ -247,7 +243,6 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
                 </div>
               </div>
 
-              {/* Detail Footer */}
               <div className="p-3 bg-[#12141A]">
                 <span className="text-[9px] font-mono text-neutral-500 block uppercase">Box Entry #{drop.id}</span>
                 <h4 className="text-xs font-black text-white uppercase tracking-wide truncate mt-0.5">{drop.title}</h4>
@@ -260,7 +255,7 @@ export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }
         </div>
       </div>
 
-      {/* SECTION 2 : DROPS ARCHIVÉS (5-10 Derniers Drops) */}
+      {/* ARCHIVED DROPS SECTION */}
       <div className="space-y-4 pt-4 border-t border-white/10">
         <h3 className="text-xs font-mono font-bold tracking-widest text-neutral-500 uppercase">Archived Drops // Hall of Fame</h3>
 
