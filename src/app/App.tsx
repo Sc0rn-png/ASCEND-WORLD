@@ -7,44 +7,8 @@ import { CheckoutScreen } from './components/CheckoutScreen';
 import { ConfirmationScreen } from './components/ConfirmationScreen';
 import { GalleryScreen } from './components/GalleryScreen';
 import { ProfileScreen } from './components/ProfileScreen';
-const [usedTokens, setUsedTokens] = useState<string[]>(() => {
-  try {
-    const saved = localStorage.getItem('ascend_used_tokens');
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-});
+import { ClaimScreen } from './components/ClaimScreen';
 
-const [claimParams, setClaimParams] = useState<{ dropId: string; token: string } | null>(null);
-
-// Intercepter les paramètres de QR code au lancement
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const dropId = params.get('dropId');
-  const token = params.get('token');
-
-  if (dropId && token) {
-    setClaimParams({ dropId, token });
-  }
-}, []);
-
-const handleClaimComplete = (photos: string[], author: string) => {
-  if (!claimParams) return;
-
-  // 1. Marquer le token comme brûlé/invalide
-  const updatedTokens = [...usedTokens, claimParams.token];
-  setUsedTokens(updatedTokens);
-  localStorage.setItem('ascend_used_tokens', JSON.stringify(updatedTokens));
-
-  // 2. Publier les photos sur le drop dans la Galerie
-  // ... (mise à jour du state des drops)
-
-  // 3. Nettoyer l'URL
-  window.history.replaceState({}, document.title, window.location.pathname);
-  setClaimParams(null);
-  setCurrentScreen('gallery');
-};
 const INITIAL_DROPS: Drop[] = [
   { 
     id: '001', 
@@ -71,10 +35,24 @@ const INITIAL_DROPS: Drop[] = [
 ];
 
 export default function App() {
+  // Navigation & États généraux
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedDropId, setSelectedDropId] = useState<string>('001');
   const [votedIds, setVotedIds] = useState<string[]>([]);
   
+  // Gestion du Token QR Code & Réclamation
+  const [usedTokens, setUsedTokens] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('ascend_used_tokens');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [claimParams, setClaimParams] = useState<{ dropId: string; token: string } | null>(null);
+
+  // Persistence Drops & Utilisateur
   const [drops, setDrops] = useState<Drop[]>(() => {
     try {
       const saved = localStorage.getItem('ascend_drops');
@@ -93,6 +71,18 @@ export default function App() {
     }
   });
 
+  // Intercepter les paramètres de QR code au lancement (?dropId=...&token=...)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dropId = params.get('dropId');
+    const token = params.get('token');
+
+    if (dropId && token) {
+      setClaimParams({ dropId, token });
+    }
+  }, []);
+
+  // Sync LocalStorage
   useEffect(() => {
     try {
       localStorage.setItem('ascend_drops', JSON.stringify(drops));
@@ -115,6 +105,27 @@ export default function App() {
 
   const selectedDrop = drops.find(d => d.id === selectedDropId) || drops[0];
 
+  // Handlers
+  const handleClaimComplete = (photos: string[], author: string) => {
+    if (!claimParams) return;
+
+    // 1. Marquer le token comme brûlé/invalide
+    const updatedTokens = [...usedTokens, claimParams.token];
+    setUsedTokens(updatedTokens);
+    localStorage.setItem('ascend_used_tokens', JSON.stringify(updatedTokens));
+
+    // 2. Nettoyer l'URL sans recharger la page
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setClaimParams(null);
+    setCurrentScreen('gallery');
+  };
+
+  const handleClaimCancel = () => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setClaimParams(null);
+    setCurrentScreen('gallery');
+  };
+
   const handleRegister = (name: string, email: string, rgpdAccepted: boolean) => {
     setUser({ name, email, points: 150, rgpdAccepted, orders: [] });
     setCurrentScreen('checkout');
@@ -123,7 +134,6 @@ export default function App() {
   const handleConfirmPayment = () => {
     if (!user) return setCurrentScreen('auth');
     
-    // Incrémentation directe du nombre de participants sur le drop actif
     setDrops(prevDrops => prevDrops.map(d => {
       if (d.id === selectedDropId) {
         return {
@@ -167,7 +177,7 @@ export default function App() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090A0C]/70 border-b border-white/[0.08]">
         <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
           
-          <div onClick={() => setCurrentScreen('home')} className="cursor-pointer group flex items-center gap-2">
+          <div onClick={() => { setClaimParams(null); setCurrentScreen('home'); }} className="cursor-pointer group flex items-center gap-2">
             <span className="font-black text-xl tracking-[0.25em] text-white group-hover:text-neutral-300 transition-colors">
               ASCEND<span className="text-neutral-500 font-light">WORLD</span>
             </span>
@@ -176,20 +186,20 @@ export default function App() {
 
           <nav className="flex items-center gap-8 text-xs font-bold tracking-wider uppercase">
             <button 
-              onClick={() => setCurrentScreen('home')} 
-              className={`transition-colors ${currentScreen === 'home' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+              onClick={() => { setClaimParams(null); setCurrentScreen('home'); }} 
+              className={`transition-colors ${currentScreen === 'home' && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
             >
               Home
             </button>
             <button 
-              onClick={() => setCurrentScreen('catalog')} 
-              className={`transition-colors ${currentScreen === 'catalog' || currentScreen === 'detail' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+              onClick={() => { setClaimParams(null); setCurrentScreen('catalog'); }} 
+              className={`transition-colors ${(currentScreen === 'catalog' || currentScreen === 'detail') && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
             >
               Drops
             </button>
             <button 
-              onClick={() => setCurrentScreen('gallery')} 
-              className={`transition-colors ${currentScreen === 'gallery' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+              onClick={() => { setClaimParams(null); setCurrentScreen('gallery'); }} 
+              className={`transition-colors ${currentScreen === 'gallery' && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
             >
               Gallery
             </button>
@@ -198,7 +208,7 @@ export default function App() {
           <div>
             {user ? (
               <button 
-                onClick={() => setCurrentScreen('profile')} 
+                onClick={() => { setClaimParams(null); setCurrentScreen('profile'); }} 
                 className="group flex items-center gap-3 bg-[#13151C] hover:bg-[#1A1D26] border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all"
               >
                 <span className="text-xs font-black text-white">{user.name}</span>
@@ -208,7 +218,7 @@ export default function App() {
               </button>
             ) : (
               <button 
-                onClick={() => setCurrentScreen('auth')} 
+                onClick={() => { setClaimParams(null); setCurrentScreen('auth'); }} 
                 className="rounded-xl bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-5 py-2.5 transition-all"
               >
                 Join
@@ -220,40 +230,53 @@ export default function App() {
 
       {/* Main Container */}
       <main className="max-w-5xl mx-auto px-6 py-10">
-        {currentScreen === 'home' && (
-          <div className="py-16 text-center space-y-8 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono tracking-widest uppercase text-neutral-400">
-              <span className="w-2 h-2 rounded-full bg-[#00FF87]" />
-              Season 01 // Batch Access
-            </div>
-            
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white uppercase leading-none">
-              PROGRESS. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-400 to-neutral-600">
-                DOMINATE.
-              </span>
-            </h1>
+        {/* Écran d'activation par QR Code prioritaire si un token est détecté dans l'URL */}
+        {claimParams ? (
+          <ClaimScreen
+            dropId={claimParams.dropId}
+            token={claimParams.token}
+            isTokenUsed={usedTokens.includes(claimParams.token)}
+            onComplete={handleClaimComplete}
+            onCancel={handleClaimCancel}
+          />
+        ) : (
+          <>
+            {currentScreen === 'home' && (
+              <div className="py-16 text-center space-y-8 max-w-2xl mx-auto">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono tracking-widest uppercase text-neutral-400">
+                  <span className="w-2 h-2 rounded-full bg-[#00FF87]" />
+                  Season 01 // Batch Access
+                </div>
+                
+                <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white uppercase leading-none">
+                  PROGRESS. <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-400 to-neutral-600">
+                    DOMINATE.
+                  </span>
+                </h1>
 
-            <p className="text-neutral-400 text-base font-normal leading-relaxed max-w-lg mx-auto">
-              Secure physical prototype allocations, track live batch progression, and shape upcoming developments in the Gallery.
-            </p>
+                <p className="text-neutral-400 text-base font-normal leading-relaxed max-w-lg mx-auto">
+                  Secure physical prototype allocations, track live batch progression, and shape upcoming developments in the Gallery.
+                </p>
 
-            <button 
-              onClick={() => setCurrentScreen('catalog')} 
-              className="bg-white hover:bg-neutral-200 text-black font-black text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all"
-            >
-              Explore Live Drops
-            </button>
-          </div>
+                <button 
+                  onClick={() => setCurrentScreen('catalog')} 
+                  className="bg-white hover:bg-neutral-200 text-black font-black text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all"
+                >
+                  Explore Live Drops
+                </button>
+              </div>
+            )}
+
+            {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
+            {currentScreen === 'catalog' && <CatalogScreen drops={drops} onSelectDrop={(id) => { setSelectedDropId(id); setCurrentScreen('detail'); }} />}
+            {currentScreen === 'detail' && <DropDetailScreen drop={selectedDrop} user={user} onSubscribe={() => setCurrentScreen(user ? 'checkout' : 'auth')} />}
+            {currentScreen === 'checkout' && <CheckoutScreen drop={selectedDrop} onConfirmPayment={handleConfirmPayment} />}
+            {currentScreen === 'confirmation' && <ConfirmationScreen onGoToVoting={() => setCurrentScreen('gallery')} />}
+            {currentScreen === 'gallery' && <GalleryScreen votedIds={votedIds} onVote={handleVote} />}
+            {currentScreen === 'profile' && user && <ProfileScreen user={user} onLogout={handleLogout} />}
+          </>
         )}
-
-        {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
-        {currentScreen === 'catalog' && <CatalogScreen drops={drops} onSelectDrop={(id) => { setSelectedDropId(id); setCurrentScreen('detail'); }} />}
-        {currentScreen === 'detail' && <DropDetailScreen drop={selectedDrop} user={user} onSubscribe={() => setCurrentScreen(user ? 'checkout' : 'auth')} />}
-        {currentScreen === 'checkout' && <CheckoutScreen drop={selectedDrop} onConfirmPayment={handleConfirmPayment} />}
-        {currentScreen === 'confirmation' && <ConfirmationScreen onGoToVoting={() => setCurrentScreen('gallery')} />}
-        {currentScreen === 'gallery' && <GalleryScreen votedIds={votedIds} onVote={handleVote} />}
-        {currentScreen === 'profile' && user && <ProfileScreen user={user} onLogout={handleLogout} />}
       </main>
     </div>
   );
