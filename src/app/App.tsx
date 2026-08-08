@@ -210,10 +210,10 @@ export default function App() {
                 onClick={() => { setClaimParams(null); setCurrentScreen('profile'); }} 
                 className="group flex items-center gap-3 bg-[#13151C] hover:bg-[#1A1D26] border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all"
               >
-                <span className="text-xs font-black text-white">{user.name}</span>
-                <span className="text-xs font-mono font-bold text-[#00FF87] bg-[#00FF87]/10 px-2.5 py-0.5 rounded-md border border-[#00FF87]/20">
-                  +{user.points} PTS
-                </span>
+             <span className="text-xs font-black text-white">{user.name}</span>
+<span className="text-xs font-mono font-bold text-cyan-300 bg-cyan-500/10 px-2.5 py-0.5 rounded-md border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+  +{user.points} PTS
+</span>
               </button>
             ) : (
               <button 
