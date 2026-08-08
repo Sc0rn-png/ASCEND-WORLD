@@ -13,29 +13,32 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) 
         
         <div className="flex justify-between items-center border-b border-white/10 pb-6">
           <div>
-            <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Profil Joueur</span>
+            <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Operator Profile</span>
             <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-0.5">{user.name}</h2>
           </div>
-          <button onClick={onLogout} className="text-xs font-mono text-red-400 hover:text-red-300 uppercase tracking-wider">
-            Déconnexion
+          <button 
+            onClick={onLogout} 
+            className="text-xs font-mono text-red-400 hover:text-red-300 uppercase tracking-wider transition-colors"
+          >
+            Disconnect
           </button>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl">
-            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Solde Points</span>
-            <span className="text-2xl font-black text-[#00FF87] mt-1 block">{user.points} PTS</span>
+            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Points Balance</span>
+            <span className="text-2xl font-black font-mono text-[#00FF87] mt-1 block">{user.points} PTS</span>
           </div>
           <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl">
-            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Statut RGPD</span>
-            <span className="text-sm font-bold text-white mt-2 block">Conforme ✓</span>
+            <span className="block text-[10px] font-mono text-neutral-500 uppercase">Data Status</span>
+            <span className="text-sm font-mono font-bold text-white mt-2 block">Compliant ✓</span>
           </div>
         </div>
 
         <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl space-y-2">
-          <span className="block text-[10px] font-mono text-neutral-500 uppercase">Historique des Commandes</span>
+          <span className="block text-[10px] font-mono text-neutral-500 uppercase">Order History</span>
           <p className="text-xs font-mono text-neutral-300">
-            {user.orders.length > 0 ? user.orders.join(' • ') : 'Aucune commande enregistrée'}
+            {user.orders.length > 0 ? user.orders.join(' • ') : 'No recorded orders in vault'}
           </p>
         </div>
 
@@ -43,3 +46,5 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) 
     </div>
   );
 };
+
+export default ProfileScreen;
