@@ -82,7 +82,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
 
                 <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between gap-4">
                   <div>
-                    <span className="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Entry Deposit</span>
+                    <span className="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Access Deposit</span>
                     <span className="text-2xl font-black text-white tracking-tight">€{drop.price}</span>
                   </div>
 
