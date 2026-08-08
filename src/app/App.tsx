@@ -33,6 +33,72 @@ const INITIAL_DROPS: Drop[] = [
     currentParticipants: 12,
     maxParticipants: 100,
     imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '003', 
+    title: 'KEYCARD PASS v1.0', 
+    price: 80, 
+    description: 'Physical and digital access pass unlocking gallery voting rights and secret drop allocations.', 
+    status: 'live',
+    category: 'ACCESS / PASS',
+    currentParticipants: 84,
+    maxParticipants: 100,
+    imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '004', 
+    title: 'NEON RESIN FIGURINE #00', 
+    price: 120, 
+    description: 'HD resin printed collectible figurine, hand-painted. Shipped with certificate of authenticity.', 
+    status: 'coming_soon',
+    category: 'ART / SCULPTURE',
+    currentParticipants: 5,
+    maxParticipants: 25,
+    imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '005', 
+    title: 'TACTICAL SLING BAG', 
+    price: 65, 
+    description: 'Waterproof Cordura urban sling featuring Cobra magnetic buckles and modular storage compartments.', 
+    status: 'live',
+    category: 'HARDWARE / GEAR',
+    currentParticipants: 41,
+    maxParticipants: 60,
+    imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '006', 
+    title: 'SEASON 01 SOUNDTRACK LP', 
+    price: 40, 
+    description: 'Limited vinyl edition on transparent violet vinyl. Screenprinted sleeve artwork by the community.', 
+    status: 'coming_soon',
+    category: 'MEDIA / AUDIO',
+    currentParticipants: 18,
+    maxParticipants: 150,
+    imageUrl: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '007', 
+    title: 'GICLÉE PRINT - "ASCENSION"', 
+    price: 45, 
+    description: 'Large format fine art giclée print on FineArt 310g paper, signed and stamped with UV ink.', 
+    status: 'live',
+    category: 'ART / PRINT',
+    currentParticipants: 29,
+    maxParticipants: 40,
+    imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=1000'
+  },
+  { 
+    id: '008', 
+    title: 'MODULAR UTILITY JACKET', 
+    price: 110, 
+    description: 'Breathable technical jacket featuring interchangeable velcro patches and reflective details.', 
+    status: 'coming_soon',
+    category: 'STREETWEAR / APPAREL',
+    currentParticipants: 44,
+    maxParticipants: 80,
+    imageUrl: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=1000'
   }
 ];
 
