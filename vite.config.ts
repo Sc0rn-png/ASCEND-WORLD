@@ -16,7 +16,7 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
-  base: './', // <-- Remets bien cette ligne ici
+  base: './',
   plugins: [
     figmaAssetResolver(),
     react(),
@@ -26,6 +26,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    dedupe: ['react', 'react-dom'], // <-- Empêche la duplication de React
   },
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
