@@ -1,298 +1,174 @@
-import React, { useState, useEffect } from 'react';
-import { GalleryDropItem, GallerySubmission } from '../types';
+import React from 'react';
 
-// Mock Data with Box and submission images
-const INITIAL_GALLERY_DROPS: GalleryDropItem[] = [
+export interface GalleryItem {
+  id: string;
+  dropNumber: string;
+  category: string;
+  title: string;
+  submissionsCount: number;
+  status: 'LIVE' | 'ENDED' | 'UPCOMING';
+  imageUrl: string;
+}
+
+export const GALLERY_DATA: GalleryItem[] = [
   {
-    id: 'D01',
-    title: 'EXTRACT PROTOCOL #01',
-    boxImageUrl: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=800',
-    status: 'active',
-    endsAtSeconds: 14400, // 4 hours
-    submissions: [
-      { id: 'S01', imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=800', author: '@KAI_99', votes: 142 },
-      { id: 'S02', imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800', author: '@NEO_TACTICAL', votes: 118 },
-      { id: 'S03', imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=800', author: '@DARK_VALLEY', votes: 95 },
-      { id: 'S04', imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800', author: '@SHADOW_FRAME', votes: 64 },
-      { id: 'S05', imageUrl: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=800', author: '@ZERO_CORP', votes: 41 },
-    ]
+    id: '001',
+    dropNumber: '#D01',
+    category: 'FOOTWEAR / CUSTOM',
+    title: 'CUSTOM SNEAKER KIT #01',
+    submissionsCount: 14,
+    status: 'LIVE',
+    imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80',
   },
   {
-    id: 'D00',
-    title: 'LEGACY BATCH #00',
-    boxImageUrl: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&q=80&w=800',
-    status: 'completed',
-    endsAtSeconds: 0,
-    submissions: [
-      { id: 'H01', imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=800', author: '@VORTEX_OG', votes: 380 },
-      { id: 'H02', imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800', author: '@BLAKE_PRO', votes: 290 },
-      { id: 'H03', imageUrl: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800', author: '@ALPHA_01', votes: 245 },
-      { id: 'H04', imageUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&q=80&w=800', author: '@STEALTH_GEAR', votes: 190 },
-      { id: 'H05', imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800', author: '@RUNNER_X', votes: 155 },
-    ]
-  }
+    id: '002',
+    dropNumber: '#D02',
+    category: 'STREETWEAR / APPAREL',
+    title: 'TACTICAL BALACLAVA MASK',
+    submissionsCount: 8,
+    status: 'LIVE',
+    imageUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '003',
+    dropNumber: '#D03',
+    category: 'STREETWEAR / APPAREL',
+    title: 'HEAVYWEIGHT 500 GSM HOODIE',
+    submissionsCount: 22,
+    status: 'LIVE',
+    imageUrl: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '004',
+    dropNumber: '#D04',
+    category: 'COLLECTIBLES / ART',
+    title: 'UNPAINTED RESIN FIGURE',
+    submissionsCount: 0,
+    status: 'UPCOMING',
+    imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '005',
+    dropNumber: '#D05',
+    category: 'ACCESSORIES / GEAR',
+    title: 'RAW CANVAS TOTE BAG',
+    submissionsCount: 0,
+    status: 'UPCOMING',
+    imageUrl: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '006',
+    dropNumber: '#D06',
+    category: 'HEADWEAR / ACCESSORIES',
+    title: 'STRUCTURED CANVAS CAP',
+    submissionsCount: 0,
+    status: 'UPCOMING',
+    imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '007',
+    dropNumber: '#D07',
+    category: 'GAMING / COLLECTIBLES',
+    title: 'ACRYLIC DECK VAULT & CASE',
+    submissionsCount: 0,
+    status: 'UPCOMING',
+    imageUrl: 'https://images.unsplash.com/photo-1613771404784-3a5686aa2be3?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: '008',
+    dropNumber: '#D08',
+    category: 'OUTERWEAR / CUSTOM',
+    title: 'VINTAGE WASH DENIM JACKET',
+    submissionsCount: 0,
+    status: 'UPCOMING',
+    imageUrl: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=800&q=80',
+  },
 ];
 
 interface GalleryScreenProps {
-  votedIds: string[];
-  onVote: (creationId: string) => void;
+  onSelectSession?: (id: string) => void;
 }
 
-export const GalleryScreen: React.FC<GalleryScreenProps> = ({ votedIds, onVote }) => {
-  const [selectedDropId, setSelectedDropId] = useState<string | null>(null);
-  const [drops, setDrops] = useState<GalleryDropItem[]>(INITIAL_GALLERY_DROPS);
-
-  const selectedDrop = drops.find(d => d.id === selectedDropId);
-
-  // Countdown timer for active selected drop
-  const [timeLeft, setTimeLeft] = useState<number>(selectedDrop?.endsAtSeconds || 0);
-
-  useEffect(() => {
-    if (!selectedDrop || selectedDrop.status !== 'active') return;
-    setTimeLeft(selectedDrop.endsAtSeconds);
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [selectedDropId, selectedDrop]);
-
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
-
-  const handleLocalVote = (submissionId: string) => {
-    if (votedIds.includes(submissionId)) return;
-    
-    setDrops(prev => prev.map(d => {
-      if (d.id === selectedDropId) {
-        return {
-          ...d,
-          submissions: d.submissions.map(s => s.id === submissionId ? { ...s, votes: s.votes + 1 } : s)
-        };
-      }
-      return d;
-    }));
-
-    onVote(submissionId);
-  };
-
-  // --- VIEW 1: DETAILED VIEW OF A DROP (PARTICIPANT SUBMISSIONS) ---
-  if (selectedDrop) {
-    const sortedSubmissions = [...selectedDrop.submissions].sort((a, b) => b.votes - a.votes);
-    const displayedSubmissions = selectedDrop.status === 'completed' 
-      ? sortedSubmissions.slice(0, 5) 
-      : sortedSubmissions;
-
-    return (
-      <div className="space-y-6">
-        
-        {/* Back Navigation & Status */}
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <button 
-            onClick={() => setSelectedDropId(null)}
-            className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white transition-colors"
-          >
-            ← Back to Gallery
-          </button>
-          
-          <span className="text-[10px] font-mono tracking-widest text-[#00FF87] bg-[#00FF87]/10 px-3 py-1 rounded-full border border-[#00FF87]/20">
-            {selectedDrop.status === 'active' ? 'LIVE SESSION' : 'HALL OF FAME'}
-          </span>
-        </div>
-
-        {/* TIMER BANNER (Active Drops Only) */}
-        {selectedDrop.status === 'active' && (
-          <div className="bg-[#12141A] rounded-2xl border border-[#00FF87]/30 p-4 sm:p-6 text-center space-y-1 shadow-[0_0_30px_rgba(0,255,135,0.08)] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00FF87] to-transparent" />
-            <span className="text-[10px] font-mono tracking-widest text-neutral-400 uppercase">
-              REWARD ALLOCATION COUNTDOWN
-            </span>
-            <div className="text-3xl sm:text-5xl font-black font-mono tracking-wider text-[#00FF87] animate-pulse">
-              {formatTime(timeLeft)}
-            </div>
-            <p className="text-[11px] text-neutral-400">
-              Top 3 submissions automatically claim physical drop packages when timer hits 00:00:00.
-            </p>
-          </div>
-        )}
-
-        {/* Selected Drop Header */}
-        <div>
-          <h2 className="text-2xl font-black text-white uppercase">{selectedDrop.title}</h2>
-          <p className="text-xs text-neutral-400 mt-1 font-mono">
-            {selectedDrop.status === 'active' ? 'Community Submissions' : 'Final Top 5 Ranked Submissions'}
-          </p>
-        </div>
-
-        {/* MASONRY GRID */}
-        <div className="columns-2 gap-3 space-y-3">
-          {displayedSubmissions.map((item, index) => {
-            const rank = index + 1;
-            const hasVoted = votedIds.includes(item.id);
-
-            return (
-              <div 
-                key={item.id} 
-                className="break-inside-avoid relative group rounded-xl overflow-hidden bg-[#12141A] border border-white/10 hover:border-white/30 transition-all duration-300 shadow-lg"
-              >
-                {/* Submission Image */}
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.author} 
-                  className="w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90 transition-opacity" />
-
-                {/* Rank Badges */}
-                {((selectedDrop.status === 'active' && rank <= 3) || selectedDrop.status === 'completed') && (
-                  <div className="absolute top-2 left-2">
-                    <span className={`text-[10px] font-mono font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-wider backdrop-blur-md border ${
-                      rank === 1 ? 'bg-amber-400 text-black border-amber-300' :
-                      rank === 2 ? 'bg-slate-300 text-black border-white' :
-                      rank === 3 ? 'bg-amber-700 text-white border-amber-600' :
-                      'bg-black/60 text-white border-white/20'
-                    }`}>
-                      #{rank} {rank === 1 ? 'GOLD' : rank === 2 ? 'SILVER' : rank === 3 ? 'BRONZE' : ''}
-                    </span>
-                  </div>
-                )}
-
-                {/* Card Footer: Info & Vote Button */}
-                <div className="absolute bottom-2 left-2 right-2 flex flex-col justify-end gap-1.5">
-                  <div className="flex justify-between items-end">
-                    <span className="text-[11px] font-bold text-white tracking-wide truncate">{item.author}</span>
-                    <span className="text-xs font-mono font-black text-[#00FF87]">{item.votes} PTS</span>
-                  </div>
-
-                  {selectedDrop.status === 'active' && (
-                    <button 
-                      onClick={() => handleLocalVote(item.id)}
-                      disabled={hasVoted}
-                      className={`w-full py-2 rounded-lg font-black text-[10px] uppercase tracking-wider transition-all duration-200 active:scale-95 ${
-                        hasVoted 
-                          ? 'bg-neutral-800 text-neutral-500 border border-white/5 cursor-not-allowed' 
-                          : 'bg-[#00FF87] hover:bg-[#00E077] text-black shadow-[0_0_15px_rgba(0,255,135,0.2)]'
-                      }`}
-                    >
-                      {hasVoted ? 'Endorsed ✓' : 'Vote (+50 PTS)'}
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-      </div>
-    );
-  }
-
-  // --- VIEW 2: LIST OF ACTIVE & ARCHIVED DROPS (COVER BOXES) ---
-  const activeDrops = drops.filter(d => d.status === 'active');
-  const pastDrops = drops.filter(d => d.status === 'completed');
-
+export const GalleryScreen: React.FC<GalleryScreenProps> = ({ onSelectSession }) => {
   return (
-    <div className="space-y-10">
-      
-      {/* Title Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-white/10 pb-6 gap-4">
+    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+      {/* Header section */}
+      <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
         <div>
-          <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Vault // Gallery Exhibition</span>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white uppercase mt-1">
-            CREATOR MUSEUM
+          <span className="text-xs font-mono tracking-widest text-violet-400 uppercase">
+            Vault // Gallery Exhibition
+          </span>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tight mt-1">
+            Creator Museum
           </h2>
         </div>
-        <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest">
+        <span className="text-xs font-mono text-neutral-400 uppercase tracking-wider">
           Explore Submissions
-        </div>
+        </span>
       </div>
 
-      {/* ACTIVE DROPS SECTION */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#00FF87] animate-pulse" />
-          <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase">Active Live Sessions</h3>
-        </div>
+      {/* Subheader Badge */}
+      <div className="flex items-center gap-2 mb-6">
+        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+        <span className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-widest">
+          Active Live Sessions
+        </span>
+      </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          {activeDrops.map((drop) => (
-            <div 
-              key={drop.id}
-              onClick={() => setSelectedDropId(drop.id)}
-              className="group relative cursor-pointer rounded-2xl overflow-hidden bg-[#12141A] border border-white/10 hover:border-white/30 transition-all duration-300 shadow-lg hover:-translate-y-1"
-            >
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-black">
-                <img 
-                  src={drop.boxImageUrl} 
-                  alt={drop.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#12141A] via-transparent to-black/30" />
-                
-                <div className="absolute top-2.5 left-2.5">
-                  <span className="text-[9px] font-mono font-bold tracking-wider text-[#00FF87] bg-black/60 px-2 py-0.5 rounded border border-[#00FF87]/30 backdrop-blur-md uppercase">
-                    • LIVE
-                  </span>
-                </div>
-              </div>
+      {/* Gallery Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {GALLERY_DATA.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => onSelectSession && onSelectSession(item.id)}
+            className="group relative h-[420px] rounded-2xl overflow-hidden bg-[#12141C] border border-white/10 hover:border-violet-500/50 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between"
+          >
+            {/* Background Image */}
+            <img
+              src={item.imageUrl}
+              alt={item.title}
+              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+            />
 
-              <div className="p-3 bg-[#12141A]">
-                <span className="text-[9px] font-mono text-neutral-500 block uppercase">Box Entry #{drop.id}</span>
-                <h4 className="text-xs font-black text-white uppercase tracking-wide truncate mt-0.5">{drop.title}</h4>
-                <p className="text-[10px] text-neutral-400 font-mono mt-1">
-                  {drop.submissions.length} Submissions →
-                </p>
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#090A0C] via-[#090A0C]/40 to-black/20" />
+
+            {/* Top Status Badge */}
+            <div className="relative z-10 p-4 flex justify-between items-center">
+              <span
+                className={`text-[10px] font-mono font-bold px-3 py-1 rounded-full border backdrop-blur-md uppercase tracking-wider ${
+                  item.status === 'LIVE'
+                    ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
+                    : 'bg-white/5 text-neutral-400 border-white/10'
+                }`}
+              >
+                {item.status === 'LIVE' ? '• Live' : 'Upcoming'}
+              </span>
+
+              <span className="text-[10px] font-mono font-bold text-white/80 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10">
+                {item.dropNumber}
+              </span>
+            </div>
+
+            {/* Bottom Info Section */}
+            <div className="relative z-10 p-5 space-y-2 bg-gradient-to-t from-[#090A0C] to-transparent pt-12">
+              <span className="text-[10px] font-mono font-bold text-violet-400 tracking-widest uppercase block">
+                {item.category}
+              </span>
+              <h3 className="text-lg font-black text-white uppercase tracking-tight leading-tight group-hover:text-cyan-300 transition-colors">
+                {item.title}
+              </h3>
+
+              <div className="pt-2 flex justify-between items-center text-xs font-mono text-neutral-400 border-t border-white/10 mt-3">
+                <span>{item.submissionsCount} Submissions</span>
+                <span className="text-violet-400 group-hover:translate-x-1 transition-transform">
+                  Explore →
+                </span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-
-      {/* ARCHIVED DROPS SECTION */}
-      <div className="space-y-4 pt-4 border-t border-white/10">
-        <h3 className="text-xs font-mono font-bold tracking-widest text-neutral-500 uppercase">Archived Drops // Hall of Fame</h3>
-
-        <div className="grid grid-cols-2 gap-3">
-          {pastDrops.map((drop) => (
-            <div 
-              key={drop.id}
-              onClick={() => setSelectedDropId(drop.id)}
-              className="group relative cursor-pointer rounded-2xl overflow-hidden bg-[#12141A] border border-white/5 hover:border-white/20 transition-all duration-300 opacity-80 hover:opacity-100"
-            >
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-black">
-                <img 
-                  src={drop.boxImageUrl} 
-                  alt={drop.title} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#12141A] via-transparent to-transparent" />
-                
-                <div className="absolute top-2.5 left-2.5">
-                  <span className="text-[9px] font-mono font-bold tracking-wider text-neutral-400 bg-black/60 px-2 py-0.5 rounded border border-white/10 backdrop-blur-md uppercase">
-                    ARCHIVED
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3 bg-[#12141A]">
-                <span className="text-[9px] font-mono text-neutral-500 block uppercase">Final Top 5</span>
-                <h4 className="text-xs font-black text-neutral-300 uppercase tracking-wide truncate mt-0.5">{drop.title}</h4>
-                <p className="text-[10px] text-neutral-500 font-mono mt-1">
-                  View Winners →
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
     </div>
   );
 };
