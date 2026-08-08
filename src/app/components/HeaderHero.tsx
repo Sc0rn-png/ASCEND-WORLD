@@ -31,7 +31,7 @@ export default function HeaderHero() {
           {/* Badge de Statut */}
           <div className="flex justify-between items-center mb-4">
             <span className="bg-[#FF4800] text-white font-black text-xs uppercase px-3 py-1 rounded-full border-2 border-black shadow-[2px_2px_0px_#000] animate-pulse">
-              ● Live — Places Limitées
+              ● Live — Limited spots
             </span>
             <span className="font-black text-xs uppercase tracking-wider text-gray-500">
               Founder Edition
@@ -46,14 +46,14 @@ export default function HeaderHero() {
             </span>
           </h2>
           <p className="text-sm font-semibold text-gray-700 mb-6">
-            Crée ton produit unique avec les éléments exclusifs du kit.
+            Create your unique product with the exclusive elements included in the kit.
           </p>
 
           {/* Cagnotte / Jauge de progression */}
           <div className="bg-[#F4F4F0] border-3 border-black rounded-2xl p-4 mb-6 border-2 border-black">
             <div className="flex justify-between font-black text-sm mb-2">
-              <span>73 RÉSERVÉS</span>
-              <span className="text-[#FF4800]">27 RESTANTS</span>
+              <span>73 RESERVED</span>
+              <span className="text-[#FF4800]">27 REMAINING</span>
             </div>
             {/* Barre de progression Néo-Brutaliste */}
             <div className="w-full h-6 bg-white border-2 border-black rounded-full overflow-hidden p-0.5">
@@ -92,7 +92,7 @@ export default function HeaderHero() {
 
           {/* Bouton d'Action Principal (CTA) */}
           <button className="w-full bg-lime-400 text-black font-black text-lg uppercase py-4 rounded-2xl border-3 border-black shadow-[5px_5px_0px_#000] hover:bg-lime-300 active:translate-x-1 active:translate-y-1 active:shadow-[1px_1px_0px_#000] transition-all flex items-center justify-center gap-2">
-            Rejoindre le Drop — 35€ ➔
+            Join the Drop — 35€ ➔
           </button>
 
         </div>
