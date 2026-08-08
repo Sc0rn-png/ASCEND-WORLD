@@ -199,16 +199,19 @@ export default function App() {
         ) : (
           <>
             {currentScreen === 'home' && (
-              <HomeScreen onExplore={() => setCurrentScreen('catalog')} />
+              <HomeScreen onExplore={() => setCurrentScreen('drops')} />
             )}
 
             {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
-            {currentScreen === 'catalog' && (
+            
+            {/* Prise en compte de 'drops' et 'catalog' */}
+            {(currentScreen === 'drops' || currentScreen === 'catalog') && (
               <CatalogScreen 
                 drops={drops} 
                 onSelectDrop={(id) => { setSelectedDropId(id); setCurrentScreen('detail'); }} 
               />
             )}
+            
             {currentScreen === 'detail' && (
               <DropDetailScreen 
                 drop={selectedDrop} 
