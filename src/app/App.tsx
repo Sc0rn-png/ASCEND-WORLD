@@ -8,6 +8,7 @@ import { ConfirmationScreen } from './components/ConfirmationScreen';
 import { GalleryScreen } from './components/GalleryScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ClaimScreen } from './components/ClaimScreen';
+import { HomeScreen } from './components/HomeScreen';
 
 const INITIAL_DROPS: Drop[] = [
   { 
@@ -109,12 +110,10 @@ export default function App() {
   const handleClaimComplete = (photos: string[], author: string) => {
     if (!claimParams) return;
 
-    // 1. Marquer le token comme brûlé/invalide
     const updatedTokens = [...usedTokens, claimParams.token];
     setUsedTokens(updatedTokens);
     localStorage.setItem('ascend_used_tokens', JSON.stringify(updatedTokens));
 
-    // 2. Nettoyer l'URL sans recharger la page
     window.history.replaceState({}, document.title, window.location.pathname);
     setClaimParams(null);
     setCurrentScreen('gallery');
@@ -230,7 +229,6 @@ export default function App() {
 
       {/* Main Container */}
       <main className="max-w-5xl mx-auto px-6 py-10">
-        {/* Écran d'activation par QR Code prioritaire si un token est détecté dans l'URL */}
         {claimParams ? (
           <ClaimScreen
             dropId={claimParams.dropId}
@@ -242,30 +240,7 @@ export default function App() {
         ) : (
           <>
             {currentScreen === 'home' && (
-              <div className="py-16 text-center space-y-8 max-w-2xl mx-auto">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-mono tracking-widest uppercase text-neutral-400">
-                  <span className="w-2 h-2 rounded-full bg-[#00FF87]" />
-                  Season 01 // Batch Access
-                </div>
-                
-                <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white uppercase leading-none">
-                  PROGRESS. <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-400 to-neutral-600">
-                    DOMINATE.
-                  </span>
-                </h1>
-
-                <p className="text-neutral-400 text-base font-normal leading-relaxed max-w-lg mx-auto">
-                  Secure physical prototype allocations, track live batch progression, and shape upcoming developments in the Gallery.
-                </p>
-
-                <button 
-                  onClick={() => setCurrentScreen('catalog')} 
-                  className="bg-white hover:bg-neutral-200 text-black font-black text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all"
-                >
-                  Explore Live Drops
-                </button>
-              </div>
+              <HomeScreen onExplore={() => setCurrentScreen('catalog')} />
             )}
 
             {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
