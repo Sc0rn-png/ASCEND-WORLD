@@ -9,6 +9,13 @@ import { GalleryScreen } from './components/GalleryScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { ClaimScreen } from './components/ClaimScreen';
 import { HomeScreen } from './components/HomeScreen';
+import Navbar from './components/Navbar';
+
+// Dans ton composant principal :
+<Navbar 
+  activeTab={activeTab} 
+  setActiveTab={setActiveTab} 
+/>
 
 const INITIAL_DROPS: Drop[] = [
   { 
