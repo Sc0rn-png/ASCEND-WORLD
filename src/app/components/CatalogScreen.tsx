@@ -112,10 +112,13 @@ export const DROPS_DATA: DropItem[] = [
   },
 ];
 
-export const DropsCatalog: React.FC = () => {
+interface CatalogScreenProps {
+  onSelectDrop?: (dropId: string) => void;
+}
+
+export const CatalogScreen: React.FC<CatalogScreenProps> = ({ onSelectDrop }) => {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
-      {/* Header section */}
       <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
         <div>
           <span className="text-xs font-mono tracking-widest text-violet-400 uppercase">Catalog // Live Feed</span>
@@ -124,8 +127,7 @@ export const DropsCatalog: React.FC = () => {
         <span className="text-xs font-mono text-neutral-400 uppercase tracking-wider">Live Allocations</span>
       </div>
 
-      {/* Grid of drops */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {DROPS_DATA.map((drop) => {
           const progressPercent = Math.round((drop.claimedSlots / drop.totalSlots) * 100);
 
@@ -135,7 +137,6 @@ export const DropsCatalog: React.FC = () => {
               className="bg-[#12141C] border border-white/10 rounded-2xl overflow-hidden hover:border-violet-500/40 transition-all duration-300 flex flex-col justify-between group shadow-lg"
             >
               <div>
-                {/* Image container */}
                 <div className="relative h-64 w-full overflow-hidden bg-black/40">
                   <img
                     src={drop.imageUrl}
@@ -144,7 +145,6 @@ export const DropsCatalog: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#12141C] via-transparent to-black/30" />
 
-                  {/* Top Badges */}
                   <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
                     <span className="text-xs font-mono font-bold text-white bg-black/60 backdrop-blur-md px-3 py-1 rounded-md border border-white/10">
                       {drop.tag}
@@ -161,7 +161,6 @@ export const DropsCatalog: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Drop Info */}
                 <div className="p-6 space-y-4">
                   <div>
                     <span className="text-[10px] font-mono font-bold text-violet-400 tracking-widest uppercase">
@@ -172,7 +171,6 @@ export const DropsCatalog: React.FC = () => {
 
                   <p className="text-neutral-400 text-xs leading-relaxed line-clamp-2">{drop.description}</p>
 
-                  {/* Slots Progress Bar */}
                   <div className="space-y-2 pt-2">
                     <div className="flex justify-between items-center text-xs font-mono">
                       <span className="text-neutral-400">
@@ -181,7 +179,6 @@ export const DropsCatalog: React.FC = () => {
                       <span className="font-bold text-cyan-300">{progressPercent}%</span>
                     </div>
 
-                    {/* Gradient Progress Bar (Violet to Blue/Cyan) */}
                     <div className="w-full h-2 bg-neutral-900 rounded-full overflow-hidden p-0.5 border border-white/5">
                       <div
                         className="h-full bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(139,92,246,0.5)]"
@@ -192,14 +189,16 @@ export const DropsCatalog: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card Footer */}
               <div className="px-6 pb-6 pt-2 flex justify-between items-center border-t border-white/5 mt-2">
                 <div>
                   <span className="text-[10px] font-mono text-neutral-500 uppercase block">Access Deposit</span>
                   <span className="text-xl font-black text-white">€{drop.depositPrice}</span>
                 </div>
 
-                <button className="bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(139,92,246,0.2)] active:scale-95">
+                <button
+                  onClick={() => onSelectDrop && onSelectDrop(drop.id)}
+                  className="bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(139,92,246,0.2)] active:scale-95"
+                >
                   View Drop
                 </button>
               </div>
@@ -210,3 +209,5 @@ export const DropsCatalog: React.FC = () => {
     </div>
   );
 };
+
+export default CatalogScreen;
