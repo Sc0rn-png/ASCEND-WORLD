@@ -16,7 +16,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rgpd) return alert("Vous devez accepter la politique RGPD.");
+    if (!rgpd) return alert("You must accept the privacy policy to proceed.");
     setIsEmailSent(true);
   };
 
@@ -25,51 +25,51 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
     if (inputCode === verificationCode) {
       onRegister(name, email, rgpd);
     } else {
-      alert("Code de vérification incorrect.");
+      alert("Invalid verification code. Please try again.");
     }
   };
 
   return (
     <div className="max-w-md mx-auto py-6">
       <div className="bg-[#12141A] rounded-2xl border border-white/10 p-8 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden">
-        {/* Ligne lumineuse haut de carte */}
+        {/* Top glow line */}
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
         {!isEmailSent ? (
           <form onSubmit={handleFormSubmit} className="space-y-6">
             <div>
-              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Accès Membre // Security</span>
-              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Créer un Compte</h2>
-              <p className="text-xs text-neutral-400 mt-1">Rejoignez l'arène et débloquez +150 PTS dès l'inscription.</p>
+              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Member Access // Security</span>
+              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Create Account</h2>
+              <p className="text-xs text-neutral-400 mt-1">Join the Gallery community and unlock +150 PTS upon signup.</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Pseudo / Nom</label>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Username / Handle</label>
                 <input 
                   type="text" 
                   value={name} 
                   onChange={(e) => setName(e.target.value)} 
                   className="w-full p-3.5 bg-[#090A0C] border border-white/10 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-white/40 transition-all" 
-                  placeholder="EX: PLAYER_01"
+                  placeholder="EX: CREATOR_01"
                   required 
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Adresse Email</label>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Email Address</label>
                 <input 
                   type="email" 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
                   className="w-full p-3.5 bg-[#090A0C] border border-white/10 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-white/40 transition-all" 
-                  placeholder="nom@domaine.com"
+                  placeholder="name@domain.com"
                   required 
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Mot de passe</label>
+                <label className="block text-xs font-mono uppercase text-neutral-400 mb-1.5">Password</label>
                 <input 
                   type="password" 
                   value={password} 
@@ -82,7 +82,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
               </div>
             </div>
 
-            {/* Consentement RGPD */}
+            {/* GDPR Consent */}
             <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl space-y-2">
               <label className="flex items-start gap-3 cursor-pointer text-xs text-neutral-300">
                 <input 
@@ -92,7 +92,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
                   className="mt-0.5 rounded bg-black border-white/20 text-emerald-500 focus:ring-0"
                   required 
                 />
-                <span>J'accepte la collecte de mes données conformément au traitement RGPD.</span>
+                <span>I consent to the collection and processing of my personal data under the GDPR terms.</span>
               </label>
             </div>
 
@@ -100,16 +100,16 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
               type="submit" 
               className="w-full bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_5px_20px_rgba(255,255,255,0.15)]"
             >
-              Envoyer le Code de Vérification
+              Send Verification Code
             </button>
           </form>
         ) : (
           <form onSubmit={handleVerifyCode} className="space-y-6 text-center">
             <div>
-              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Vérification OTP</span>
-              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Code de Sécurité</h2>
+              <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">OTP Verification</span>
+              <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">Security Code</h2>
               <p className="text-xs text-neutral-400 mt-2">
-                Code à 6 chiffres envoyé à <span className="text-white font-bold">{email}</span>.
+                Enter the 6-digit code sent to <span className="text-white font-bold">{email}</span>.
               </p>
             </div>
 
@@ -127,7 +127,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onRegister }) => {
               type="submit" 
               className="w-full bg-[#00FF87] hover:bg-[#00E077] text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_0_25px_rgba(0,255,135,0.25)]"
             >
-              Activer mon Compte (+150 PTS)
+              Activate Account (+150 PTS)
             </button>
           </form>
         )}
