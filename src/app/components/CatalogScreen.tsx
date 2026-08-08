@@ -1,12 +1,32 @@
 import React from 'react';
-import { Drop } from '../types';
+
+// Interface flexible pour éviter tout plantage TypeScript/données
+export interface Drop {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  status: 'live' | 'coming_soon' | string;
+  category: string;
+  currentParticipants?: number;
+  maxParticipants?: number;
+  imageUrl: string;
+}
 
 interface CatalogScreenProps {
   drops: Drop[];
   onSelectDrop: (id: string) => void;
 }
 
-export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDrop }) => {
+export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops = [], onSelectDrop }) => {
+  if (!drops || drops.length === 0) {
+    return (
+      <div className="text-center py-20 font-mono text-neutral-500">
+        NO ACTIVE DROPS FOUND.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -26,10 +46,14 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {drops.map((drop) => {
           const isLive = drop.status === 'live';
-          const progressPercent = Math.min(100, Math.round((drop.currentParticipants / drop.maxParticipants) * 100));
           
-          const currentPrize = drop.currentParticipants * 5;
-          const maxPrize = drop.maxParticipants * 5;
+          // Sécurisation des valeurs numériques contre undefined / NaN
+          const current = drop.currentParticipants ?? 0;
+          const max = drop.maxParticipants ?? 100;
+          const progressPercent = Math.min(100, Math.round((current / max) * 100));
+
+          const currentPrize = current * 5;
+          const maxPrize = max * 5;
 
           return (
             <div
@@ -41,7 +65,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                 {/* Image & Badges */}
                 <div className="relative h-56 overflow-hidden bg-neutral-900">
                   <img
-                    src={drop.imageUrl}
+                    src={drop.imageUrl || 'https://via.placeholder.com/600x400'}
                     alt={drop.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
@@ -58,13 +82,13 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                     </span>
                   </div>
 
-                  {/* Badge Cash Prize */}
+                  {/* Cash Prize Badge */}
                   <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-cyan-500/30 text-[10px] font-mono font-bold text-cyan-300">
                     PRIZE: €{currentPrize} / €{maxPrize}
                   </div>
                 </div>
 
-                {/* Info Produit */}
+                {/* Product Info */}
                 <div className="p-5 space-y-3">
                   <span className="text-[10px] font-mono tracking-widest text-violet-400 uppercase font-bold">
                     {drop.category}
@@ -78,19 +102,17 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                 </div>
               </div>
 
-              {/* Barre de Progression & Prix */}
+              {/* Progress & Bottom Bar */}
               <div className="p-5 pt-0 space-y-4">
-                
-                {/* Section Slots & Barre de progression */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs font-mono">
                     <span className="text-neutral-400">
-                      SLOTS CLAIMED: <strong className="text-white">{drop.currentParticipants} / {drop.maxParticipants}</strong>
+                      SLOTS CLAIMED: <strong className="text-white">{current} / {max}</strong>
                     </span>
                     <span className="text-cyan-400 font-bold">{progressPercent}%</span>
                   </div>
                   
-                  {/* Rail et Barre Dégradée Violet -> Cyan */}
+                  {/* Progress Bar Container */}
                   <div className="h-2 w-full bg-neutral-800 rounded-full overflow-hidden border border-white/10 relative">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
@@ -103,7 +125,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                   </div>
                 </div>
 
-                {/* Bottom CTA */}
                 <div className="flex items-center justify-between pt-2">
                   <div>
                     <span className="block text-[9px] font-mono text-neutral-400 uppercase">Access Deposit</span>
@@ -113,7 +134,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                     View Drop
                   </button>
                 </div>
-
               </div>
             </div>
           );
