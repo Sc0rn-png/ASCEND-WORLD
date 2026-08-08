@@ -18,11 +18,14 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
     Math.round((drop.currentParticipants / drop.maxParticipants) * 100)
   );
 
+  // Calcul dynamique du Cash Prize : 5€ par slot
+  const cashPrize = drop.maxParticipants * 5;
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-[#111319] border border-white/10 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl">
         
-        {/* En-tête Image & Badges */}
+        {/* Image & Badges */}
         <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-neutral-900">
           <img
             src={drop.imageUrl}
@@ -31,14 +34,14 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#111319] via-transparent to-black/40" />
 
-          {/* Badge Numéro de Fichier */}
+          {/* Numéro de Fichier */}
           <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-xl border border-white/10">
             <span className="text-xs font-mono font-bold text-neutral-300">
               FILE #{drop.id}
             </span>
           </div>
 
-          {/* Badge Statut (Cyan si Live, Violet si Coming Soon) */}
+          {/* Statut Live / Coming Soon */}
           <div className="absolute top-4 right-4">
             <span
               className={`text-xs font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-xl border backdrop-blur-md ${
@@ -55,7 +58,7 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
         {/* Détails du Drop */}
         <div className="p-6 sm:p-8 space-y-6">
           
-          {/* Categorie & Titre */}
+          {/* Categorie & Titre dynamiques */}
           <div className="space-y-2">
             <p className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400">
               {drop.category}
@@ -68,26 +71,32 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
             </p>
           </div>
 
-          {/* Widgets d'informations (Anciennement Vert) */}
+          {/* Cartes d'informations */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             
-            {/* Box Reward Points */}
+            {/* Cash Prize calculé */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
-                Member Reward
+                Cash Prize
               </span>
-              <p className="text-sm font-mono font-bold text-cyan-300">
-                +500 PTS Unlocked
+              <p className="text-lg font-mono font-bold text-cyan-300">
+                €{cashPrize}
+              </p>
+              <p className="text-[10px] text-neutral-400">
+                Awarded to most liked creation
               </p>
             </div>
 
-            {/* Box Disponibilité */}
+            {/* Disponibilité */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
                 Availability
               </span>
-              <p className="text-sm font-mono font-bold text-white">
-                Limited Batch ({drop.maxParticipants} units)
+              <p className="text-lg font-mono font-bold text-white">
+                {drop.maxParticipants} slots
+              </p>
+              <p className="text-[10px] text-neutral-400">
+                5€ / slot added to prize pool
               </p>
             </div>
           </div>
@@ -108,7 +117,7 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({
             </div>
           </div>
 
-          {/* Footer : Prix & Bouton d'Action */}
+          {/* Prix & Action */}
           <div className="pt-6 border-t border-white/10 flex items-center justify-between gap-4">
             <div>
               <span className="block text-[10px] font-mono uppercase tracking-wider text-neutral-400">
