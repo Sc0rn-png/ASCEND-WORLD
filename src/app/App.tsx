@@ -14,7 +14,7 @@ import Navbar from './components/Navbar';
 const INITIAL_DROPS: Drop[] = [
   { 
     id: '001', 
-    title: 'CUSTOM SNEAKER KIT #01', 
+    title: 'CUSTOM SNEAKER KIT', 
     price: 35, 
     description: 'Raw white low-top sneaker canvas equipped with premium acrylic paint set, prep solution, and custom stencils.', 
     status: 'live',
