@@ -26,7 +26,7 @@ export const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({ onGoToVo
           onClick={onGoToVoting} 
           className="w-full bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_5px_20px_rgba(255,255,255,0.15)]"
         >
-          Enter Voting Arena
+          Enter Voting Gallery
         </button>
       </div>
     </div>
