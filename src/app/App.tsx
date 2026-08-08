@@ -11,12 +11,6 @@ import { ClaimScreen } from './components/ClaimScreen';
 import { HomeScreen } from './components/HomeScreen';
 import Navbar from './components/Navbar';
 
-// Dans ton composant principal :
-<Navbar 
-  activeTab={activeTab} 
-  setActiveTab={setActiveTab} 
-/>
-
 const INITIAL_DROPS: Drop[] = [
   { 
     id: '001', 
@@ -179,63 +173,21 @@ export default function App() {
       
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-white/[0.04] to-transparent blur-3xl pointer-events-none -z-10" />
 
-      {/* Top Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090A0C]/70 border-b border-white/[0.08]">
-        <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
-          
-          <div onClick={() => { setClaimParams(null); setCurrentScreen('home'); }} className="cursor-pointer group flex items-center gap-2">
-            <span className="font-black text-xl tracking-[0.25em] text-white group-hover:text-neutral-300 transition-colors">
-              ASCEND<span className="text-neutral-500 font-light">WORLD</span>
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse" />
-          </div>
+      {/* Barre de navigation responsive */}
+      <Navbar 
+        activeTab={currentScreen} 
+        setActiveTab={(tab) => {
+          setClaimParams(null);
+          setCurrentScreen(tab as Screen);
+        }}
+        onConnect={() => {
+          setClaimParams(null);
+          setCurrentScreen(user ? 'profile' : 'auth');
+        }}
+      />
 
-          <nav className="flex items-center gap-8 text-xs font-bold tracking-wider uppercase">
-            <button 
-              onClick={() => { setClaimParams(null); setCurrentScreen('home'); }} 
-              className={`transition-colors ${currentScreen === 'home' && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => { setClaimParams(null); setCurrentScreen('catalog'); }} 
-              className={`transition-colors ${(currentScreen === 'catalog' || currentScreen === 'detail') && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-            >
-              Drops
-            </button>
-            <button 
-              onClick={() => { setClaimParams(null); setCurrentScreen('gallery'); }} 
-              className={`transition-colors ${currentScreen === 'gallery' && !claimParams ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
-            >
-              Gallery
-            </button>
-          </nav>
-
-          <div>
-            {user ? (
-              <button 
-                onClick={() => { setClaimParams(null); setCurrentScreen('profile'); }} 
-                className="group flex items-center gap-3 bg-[#13151C] hover:bg-[#1A1D26] border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl transition-all"
-              >
-             <span className="text-xs font-black text-white">{user.name}</span>
-<span className="text-xs font-mono font-bold text-cyan-300 bg-cyan-500/10 px-2.5 py-0.5 rounded-md border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]">
-  +{user.points} PTS
-</span>
-              </button>
-            ) : (
-              <button 
-                onClick={() => { setClaimParams(null); setCurrentScreen('auth'); }} 
-                className="rounded-xl bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-5 py-2.5 transition-all"
-              >
-                Join
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="max-w-5xl mx-auto px-6 py-10">
+      {/* Contenu Principal */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {claimParams ? (
           <ClaimScreen
             dropId={claimParams.dropId}
@@ -251,12 +203,42 @@ export default function App() {
             )}
 
             {currentScreen === 'auth' && <AuthScreen onRegister={handleRegister} />}
-            {currentScreen === 'catalog' && <CatalogScreen drops={drops} onSelectDrop={(id) => { setSelectedDropId(id); setCurrentScreen('detail'); }} />}
-            {currentScreen === 'detail' && <DropDetailScreen drop={selectedDrop} user={user} onSubscribe={() => setCurrentScreen(user ? 'checkout' : 'auth')} />}
-            {currentScreen === 'checkout' && <CheckoutScreen drop={selectedDrop} onConfirmPayment={handleConfirmPayment} />}
-            {currentScreen === 'confirmation' && <ConfirmationScreen onGoToVoting={() => setCurrentScreen('gallery')} />}
-            {currentScreen === 'gallery' && <GalleryScreen votedIds={votedIds} onVote={handleVote} />}
-            {currentScreen === 'profile' && user && <ProfileScreen user={user} onLogout={handleLogout} />}
+            {currentScreen === 'catalog' && (
+              <CatalogScreen 
+                drops={drops} 
+                onSelectDrop={(id) => { setSelectedDropId(id); setCurrentScreen('detail'); }} 
+              />
+            )}
+            {currentScreen === 'detail' && (
+              <DropDetailScreen 
+                drop={selectedDrop} 
+                user={user} 
+                onSubscribe={() => setCurrentScreen(user ? 'checkout' : 'auth')} 
+              />
+            )}
+            {currentScreen === 'checkout' && (
+              <CheckoutScreen 
+                drop={selectedDrop} 
+                onConfirmPayment={handleConfirmPayment} 
+              />
+            )}
+            {currentScreen === 'confirmation' && (
+              <ConfirmationScreen 
+                onGoToVoting={() => setCurrentScreen('gallery')} 
+              />
+            )}
+            {currentScreen === 'gallery' && (
+              <GalleryScreen 
+                votedIds={votedIds} 
+                onVote={handleVote} 
+              />
+            )}
+            {currentScreen === 'profile' && user && (
+              <ProfileScreen 
+                user={user} 
+                onLogout={handleLogout} 
+              />
+            )}
           </>
         )}
       </main>
