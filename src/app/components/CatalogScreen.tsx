@@ -28,7 +28,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
           const isLive = drop.status === 'live';
           const progressPercent = Math.min(100, Math.round((drop.currentParticipants / drop.maxParticipants) * 100));
           
-          // Calcul du Cash Prize (5€ / participant)
           const currentPrize = drop.currentParticipants * 5;
           const maxPrize = drop.maxParticipants * 5;
 
@@ -36,7 +35,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
             <div
               key={drop.id}
               onClick={() => onSelectDrop(drop.id)}
-              className="group cursor-pointer bg-[#111319]/80 hover:bg-[#161922] border border-white/10 hover:border-violet-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] flex flex-col justify-between"
+              className="group cursor-pointer bg-[#111319]/90 hover:bg-[#161922] border border-white/10 hover:border-violet-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,92,246,0.15)] flex flex-col justify-between"
             >
               <div>
                 {/* Image & Badges */}
@@ -59,13 +58,13 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                     </span>
                   </div>
 
-                  {/* Cash Prize Badge sur l'image */}
+                  {/* Badge Cash Prize */}
                   <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-cyan-500/30 text-[10px] font-mono font-bold text-cyan-300">
                     PRIZE: €{currentPrize} / €{maxPrize}
                   </div>
                 </div>
 
-                {/* Product Info */}
+                {/* Info Produit */}
                 <div className="p-5 space-y-3">
                   <span className="text-[10px] font-mono tracking-widest text-violet-400 uppercase font-bold">
                     {drop.category}
@@ -79,18 +78,24 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                 </div>
               </div>
 
-              {/* Progress & Bottom Bar */}
+              {/* Barre de Progression & Prix */}
               <div className="p-5 pt-0 space-y-4">
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-[10px] font-mono text-neutral-400">
-                    <span>SLOTS CLAIMED: <strong className="text-white">{drop.currentParticipants} / {drop.maxParticipants}</strong></span>
+                
+                {/* Section Slots & Barre de progression */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-mono">
+                    <span className="text-neutral-400">
+                      SLOTS CLAIMED: <strong className="text-white">{drop.currentParticipants} / {drop.maxParticipants}</strong>
+                    </span>
                     <span className="text-cyan-400 font-bold">{progressPercent}%</span>
                   </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
+                  
+                  {/* Rail et Barre Dégradée Violet -> Cyan */}
+                  <div className="h-2 w-full bg-neutral-800 rounded-full overflow-hidden border border-white/10 relative">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         isLive 
-                          ? 'bg-gradient-to-r from-violet-500 to-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]' 
+                          ? 'bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.6)]' 
                           : 'bg-neutral-600'
                       }`}
                       style={{ width: `${progressPercent}%` }}
@@ -98,6 +103,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                   </div>
                 </div>
 
+                {/* Bottom CTA */}
                 <div className="flex items-center justify-between pt-2">
                   <div>
                     <span className="block text-[9px] font-mono text-neutral-400 uppercase">Access Deposit</span>
@@ -107,6 +113,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({ drops, onSelectDro
                     View Drop
                   </button>
                 </div>
+
               </div>
             </div>
           );
