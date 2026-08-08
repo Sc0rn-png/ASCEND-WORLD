@@ -23,7 +23,7 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({ drop, user, 
           
           <div className="absolute top-6 left-6 right-6 flex justify-between items-center">
             <span className="text-xs font-mono text-white/80 backdrop-blur-md bg-black/50 px-3 py-1 rounded-md border border-white/10">
-              DOSSIER #{drop.id}
+              FILE #{drop.id}
             </span>
             <span className="text-xs font-mono font-bold text-[#00FF87] bg-black/60 px-3 py-1 rounded-full border border-[#00FF87]/30 uppercase backdrop-blur-md">
               {drop.status}
@@ -54,7 +54,7 @@ export const DropDetailScreen: React.FC<DropDetailScreenProps> = ({ drop, user, 
 
           <div className="pt-6 border-t border-white/10 flex items-center justify-between gap-4">
             <div>
-              <span className="block text-[10px] font-mono text-neutral-500 uppercase">Final Price</span>
+              <span className="block text-[10px] font-mono text-neutral-500 uppercase">Access Deposit</span>
               <span className="text-3xl font-black text-white">€{drop.price}</span>
             </div>
 
