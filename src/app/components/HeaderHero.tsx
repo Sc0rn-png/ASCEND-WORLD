@@ -1,109 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function HeaderHero() {
+const DYNAMIC_WORDS = ["PROTOTYPES", "THE ARCHIVE", "LIMITED BATCHES", "THE FUTURE"];
+
+export default function HeroSection() {
+  const [index, setIndex] = useState(0);
+
+  // Animation de défilement des mots du slogan
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % DYNAMIC_WORDS.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="w-full min-h-screen bg-[#090A0C] text-white font-sans pb-12">
-      {/* FIXED HEADER: Centered Logo */}
-      <header className="sticky top-0 z-50 bg-[#090A0C]/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex justify-between items-center">
-        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#00FF87] bg-[#00FF87]/10 px-3 py-1 rounded-full border border-[#00FF87]/30">
-          Drop #001
-        </span>
+    <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-hidden bg-[#090A0C] text-white py-20 px-4">
+      
+      {/* 1. ARRIÈRE-PLAN VIDÉO & NUAGE D'OMBRE */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-20 scale-105 filter grayscale contrast-125"
+          src="https://assets.mixkit.co/videos/preview/mixkit-[#00FF87]-abstract-tech-loop-41551-large.mp4" // Remplace par ton fichier .mp4
+        />
+        {/* Gradients pour fondre la vidéo dans le design sombre */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090A0C] via-[#090A0C]/60 to-[#090A0C]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#00FF87]/10 blur-[120px] rounded-full pointer-events-none" />
+      </div>
+
+      {/* 2. CONTENU PRINCIPAL */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
         
-        {/* Centered ASCEND WORLD Logo */}
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="font-black text-2xl md:text-3xl tracking-tighter leading-none uppercase text-white">
-            ASCEND
+        {/* Badge Saisonnier */}
+        <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#00FF87] bg-[#00FF87]/10 px-4 py-1.5 rounded-full border border-[#00FF87]/30 uppercase">
+          <span className="w-2 h-2 rounded-full bg-[#00FF87] animate-pulse" />
+          SEASON 01 // GLOBAL PROTOCOL
+        </div>
+
+        {/* SLOGAN ANIMÉ (ANGLAIS) */}
+        <div className="space-y-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-white">
+            CO-CREATE & SHAPE <br />
+            <span className="text-[#00FF87] transition-all duration-500 block h-[1.2em]">
+              {DYNAMIC_WORDS[index]}
+            </span>
           </h1>
-          <span className="text-[10px] md:text-xs font-mono font-bold tracking-[0.3em] uppercase text-neutral-400">
-            - WORLD -
-          </span>
+          <p className="max-w-xl mx-auto text-xs sm:text-sm font-mono text-neutral-400 leading-relaxed pt-2">
+            Claim physical prototype allocations, influence production votes in the Gallery, and gain permanent gallery status.
+          </p>
         </div>
 
-        <button className="bg-white hover:bg-neutral-200 text-black font-black text-xs uppercase tracking-wider px-4 py-2 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_5px_20px_rgba(255,255,255,0.15)]">
-          Connect
-        </button>
-      </header>
-
-      {/* HERO SECTION: Vault Drop Details */}
-      <main className="max-w-xl mx-auto px-4 pt-8">
-        <div className="bg-[#12141A] border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden space-y-6">
-          
-          {/* Status Badge */}
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-mono font-bold tracking-wider text-[#00FF87] bg-[#00FF87]/10 px-3 py-1 rounded-full border border-[#00FF87]/30 uppercase flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00FF87] animate-pulse" />
-              Live — Limited Spots
-            </span>
-            <span className="text-[10px] font-mono tracking-widest text-neutral-500 uppercase">
-              Founder Edition
-            </span>
-          </div>
-
-          {/* Product / Challenge Title */}
-          <div>
-            <span className="text-[10px] font-mono tracking-widest text-[#00FF87] uppercase">Custom Kit</span>
-            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white mt-1">
-              Tote Bag <br />
-              <span className="text-neutral-400">Custom Kit</span>
-            </h2>
-            <p className="text-xs text-neutral-300 font-normal leading-relaxed mt-2">
-              Create your unique product with the exclusive elements included in the kit.
-            </p>
-          </div>
-
-          {/* Progress / Inventory Gauge */}
-          <div className="p-4 bg-[#090A0C] border border-white/5 rounded-xl space-y-2">
-            <div className="flex justify-between font-mono text-xs font-bold">
-              <span className="text-white">73 RESERVED</span>
-              <span className="text-[#00FF87]">27 REMAINING</span>
-            </div>
-            {/* Progress Bar */}
-            <div className="w-full h-3 bg-black border border-white/10 rounded-full overflow-hidden p-0.5">
-              <div 
-                className="h-full bg-[#00FF87] rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(0,255,135,0.4)]" 
-                style={{ width: '73%' }}
-              />
-            </div>
-          </div>
-
-          {/* Statistics Grid */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-[#090A0C] border border-white/5 rounded-xl p-3 text-center">
-              <span className="block font-black text-xl font-mono text-white">73</span>
-              <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Joined</span>
-            </div>
-            <div className="bg-[#090A0C] border border-white/5 rounded-xl p-3 text-center">
-              <span className="block font-black text-xl font-mono text-[#00FF87]">27</span>
-              <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Remaining</span>
-            </div>
-            <div className="bg-[#090A0C] border border-white/5 rounded-xl p-3 text-center">
-              <span className="block font-black text-xl font-mono text-white">500€</span>
-              <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Prize Pool</span>
-            </div>
-          </div>
-
-          {/* Timer Countdown Blocks */}
-          <div className="grid grid-cols-4 gap-2 text-center">
-            {[
-              ['02', 'Days'],
-              ['07', 'Hours'],
-              ['43', 'Mins'],
-              ['15', 'Secs']
-            ].map(([val, label]) => (
-              <div key={label} className="bg-[#090A0C] text-white rounded-xl p-2.5 border border-white/5">
-                <span className="block font-black text-lg sm:text-xl font-mono text-[#00FF87]">{val}</span>
-                <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest">{label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <button className="w-full bg-[#00FF87] hover:bg-[#00E077] text-black font-black text-xs uppercase tracking-wider py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(0,255,135,0.2)] flex items-center justify-center gap-2">
-            Join the Drop — 35€ →
+        {/* CALL TO ACTION */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <button className="w-full sm:w-auto bg-[#00FF87] hover:bg-[#00E077] text-black font-black text-xs uppercase tracking-wider px-8 py-4 rounded-xl transition-all duration-200 active:scale-95 shadow-[0_0_25px_rgba(0,255,135,0.25)]">
+            Explore Live Drops
           </button>
-
+          <button className="w-full sm:w-auto bg-[#12141A] hover:bg-[#1a1d26] text-white font-mono text-xs uppercase tracking-wider px-8 py-4 rounded-xl border border-white/10 transition-all duration-200">
+            Enter Gallery
+          </button>
         </div>
-      </main>
-    </div>
+
+      </div>
+    </section>
   );
 }
