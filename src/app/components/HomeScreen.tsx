@@ -28,15 +28,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onExplore }) => {
   }, []);
 
   return (
-    <div className="relative min-h-[calc(100vh-80px)] w-full flex flex-col items-center justify-start pt-10 sm:pt-16 text-center px-4 overflow-hidden">
+    <div className="relative min-h-[calc(100vh-70px)] w-full flex flex-col items-center justify-start pt-6 sm:pt-16 text-center px-4 overflow-x-hidden">
       
-      {/* Background Anime Plein Écran (Élimine les bandes noires sur les côtés) */}
+      {/* Background Anime Plein Écran */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#090A0C]">
-        {/* Halos de couleur géants */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[90vh] bg-gradient-to-r from-violet-900/30 via-fuchsia-900/25 to-cyan-900/20 blur-[160px] rounded-full animate-pulse" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-violet-600/20 blur-[180px] rounded-full animate-bounce duration-[12000ms]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[90vh] bg-gradient-to-r from-violet-900/30 via-fuchsia-900/25 to-cyan-900/20 blur-[120px] sm:blur-[160px] rounded-full animate-pulse" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[320px] sm:w-[700px] h-[320px] sm:h-[700px] bg-violet-600/20 blur-[120px] sm:blur-[180px] rounded-full animate-bounce duration-[12000ms]" />
         
-        {/* Texture de fumée SVG pleine largeur */}
         <svg
           className="absolute inset-0 w-full h-full opacity-35 mix-blend-screen scale-125"
           xmlns="http://www.w3.org/2000/svg"
@@ -67,37 +65,39 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onExplore }) => {
         </svg>
       </div>
 
-      {/* Contenu Principal (Positionné plus haut) */}
-      <div className="relative z-10 max-w-4xl space-y-6 sm:space-y-8 mt-2 sm:mt-4">
+      {/* Contenu Principal Responsif */}
+      <div className="relative z-10 w-full max-w-4xl space-y-5 sm:space-y-8 mt-1 sm:mt-4 flex flex-col items-center">
         
         {/* Badge Saisonnier */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono tracking-widest uppercase text-violet-300 backdrop-blur-md">
-          <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-          Season 01 // Creative Ecosystem
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[9px] sm:text-[10px] font-mono tracking-wider sm:tracking-widest uppercase text-violet-300 backdrop-blur-md max-w-full truncate">
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-violet-400 animate-pulse shrink-0" />
+          <span className="truncate">Season 01 // Creative Ecosystem</span>
         </div>
 
-        {/* Headline Animé */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-none">
+        {/* Headline Animé (Résolution du texte coupé) */}
+        <h1 className="text-3xl sm:text-6xl md:text-7xl font-black tracking-tight text-white uppercase leading-tight sm:leading-none w-full">
           CREATE, SHARE & <br />
-          <span 
-            className={`text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-300 to-cyan-300 transition-all duration-300 block mt-3 h-[1.2em] ${
-              fade ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
-            }`}
-          >
-            {ACTION_PHRASES[index]}
+          <span className="inline-flex items-center justify-center min-h-[1.3em] w-full mt-1 sm:mt-3">
+            <span 
+              className={`text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-300 to-cyan-300 transition-all duration-300 leading-normal ${
+                fade ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+              }`}
+            >
+              {ACTION_PHRASES[index]}
+            </span>
           </span>
         </h1>
 
         {/* Description */}
-        <p className="text-neutral-300 text-sm sm:text-base font-normal leading-relaxed max-w-xl mx-auto">
+        <p className="text-neutral-300 text-xs sm:text-base font-normal leading-relaxed max-w-xs sm:max-w-xl mx-auto px-2">
           Explore new ways to approach art, showcase your work to the world, and earn rewards as your creations resonate with the community.
         </p>
 
         {/* Bouton d'Action */}
-        <div className="pt-2">
+        <div className="pt-2 w-full sm:w-auto px-4">
           <button
             onClick={onExplore}
-            className="bg-white hover:bg-neutral-200 text-black font-black text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.5)] active:scale-95"
+            className="w-full sm:w-auto bg-white hover:bg-neutral-200 text-black font-black text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.5)] active:scale-95"
           >
             Explore Gallery & Drops →
           </button>
